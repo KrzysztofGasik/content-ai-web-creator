@@ -1,0 +1,149 @@
+generator client {
+  provider = "prisma-client"
+  output   = "app/generated/prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Content {
+  id            String           @id @default(cuid())
+  userId        String
+  projectId     String?
+  title         String
+  type          ContentType
+  prompt        String
+  generatedText String
+  editedText    String?
+  templateId    String?
+  model         String
+  tokens        Int?
+  isFavorite    Boolean          @default(false)
+  isArchived    Boolean          @default(false)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  project       Project?         @relation(fields: [projectId], references: [id])
+  user          User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  versions      ContentVersion[]
+  images        Image[]
+  tags          Tag[]            @relation("ContentToTag")
+
+  @@index([userId, createdAt])
+}
+
+model Project {
+  id          String    @id @default(cuid())
+  userId      String
+  name        String
+  description String?
+  color       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  contents    Content[]
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Image {
+  id          String   @id @default(cuid())
+  userId      String
+  contentId   String?
+  s3Key       String   @unique
+  s3Bucket    String
+  url         String
+  filename    String
+  size        Int
+  mimeType    String
+  width       Int?
+  height      Int?
+  isGenerated Boolean  @default(false)
+  prompt      String?
+  model       String?
+  createdAt   DateTime @default(now())
+  content     Content? @relation(fields: [contentId], references: [id])
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Tag {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  contents Content[] @relation("ContentToTag")
+}
+
+model ContentVersion {
+  id        String   @id @default(cuid())
+  contentId String
+  text      String
+  createdAt DateTime @default(now())
+  content   Content  @relation(fields: [contentId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String?   @unique
+  emailVerified DateTime? @map("email_verified")
+  name          String?
+  password      String?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  contents      Content[]
+  images        Image[]
+  projects      Project[]
+  accounts      Account[]
+  sessions      Session[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+enum ContentType {
+  BLOG_POST
+  SOCIAL_TWITTER
+  SOCIAL_LINKEDIN
+  SOCIAL_INSTAGRAM
+  EMAIL
+  PRODUCT_DESC
+  AD_COPY
+  OTHER
+}

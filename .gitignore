@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# md files
+contentforge_plan.md
+
+/app/generated/prisma
