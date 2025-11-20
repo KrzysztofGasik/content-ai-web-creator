@@ -14,7 +14,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast, Toaster } from 'sonner';
 import z from 'zod';
-import CardComponent from '../dashboard/card';
+import CardComponent from '../../../components/card';
 import { Sparkle } from 'lucide-react';
 import { FormComponent } from './form';
 import useContentGeneration from '@/hooks/useContentGeneration';
@@ -46,6 +46,7 @@ export default function Generate() {
     navigator.clipboard.writeText(text);
     toast.success('Content copied');
   };
+
   const handleEdit = () => {
     if (!isEditing) {
       setEditedContent(generatedContent);

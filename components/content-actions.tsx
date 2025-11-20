@@ -1,6 +1,7 @@
 import { Button } from './ui/button';
 
 type ContentActionsProps = {
+  handleView: () => void;
   handleDelete: () => void;
   handleEdit: () => void;
   handleSave: () => Promise<void>;
@@ -10,6 +11,7 @@ type ContentActionsProps = {
 };
 
 export function ContentActions({
+  handleView,
   handleDelete,
   handleEdit,
   handleSave,
@@ -19,15 +21,16 @@ export function ContentActions({
 }: ContentActionsProps) {
   return (
     <div className="flex flex-col gap-2">
-      <Button variant="destructive" onClick={handleDelete}>
-        Delete
-      </Button>
+      <Button onClick={handleView}>View</Button>
       <Button onClick={handleEdit}>{isEditing ? 'Cancel' : 'Edit'}</Button>
       <Button
         onClick={handleSave}
         disabled={generatedContent === editedContent}
       >
         Save
+      </Button>
+      <Button variant="destructive" onClick={handleDelete}>
+        Delete
       </Button>
     </div>
   );

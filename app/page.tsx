@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
-import CardComponent from './(auth)/dashboard/card';
+import CardComponent from '../components/card';
 import { PenTool, Share2, Sparkles } from 'lucide-react';
 
 export default function Home() {

@@ -1,22 +1,28 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import CardComponent from './card';
+import CardComponent from '../../../components/card';
 import { useSession } from 'next-auth/react';
 import { useQuery } from '@tanstack/react-query';
 import { getUserContent } from '@/lib/actions';
 import { ContentFullData } from '@/types/types';
 import { QuickActions } from '@/components/quick-actions';
+import { DashboardSkeleton } from '@/components/loaders/dashboard-skeleton';
 
 export default function Dashboard() {
   const { data: session } = useSession();
-  const { data } = useQuery<ContentFullData>({
+  const { data, isLoading } = useQuery<ContentFullData>({
     queryKey: ['content', session?.user.id],
     queryFn: () => getUserContent(),
   });
+
+  if (isLoading) {
+    return <DashboardSkeleton />;
+  }
+
   return (
     <section className="flex flex-col lg:flex-row items-center lg:items-start w-full gap-5 p-10">
-      <div className="flex-1 flex-shrink-0 min-w-[300px]">
+      <div className="flex-shrink-0 min-w-[300px]">
         <CardComponent
           data={{
             id: 7,

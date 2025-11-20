@@ -12,6 +12,12 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { CardDataProps } from '@/types/types';
 import { SetStateAction } from 'react';
+import {
+  Accordion,
+  AccordionTrigger,
+  AccordionContent,
+  AccordionItem,
+} from './ui/accordion';
 
 type CardProps = {
   data: CardDataProps;
@@ -30,7 +36,7 @@ export default function CardComponent({
 }: CardProps) {
   const { title, icon, description, action, content, footer } = data;
   return (
-    <Card className="w-full max-w-sm" id={id}>
+    <Card className="w-full" id={id}>
       <CardHeader>
         {icon}
         <CardTitle>{title}</CardTitle>
@@ -38,14 +44,21 @@ export default function CardComponent({
         <CardAction>{action}</CardAction>
       </CardHeader>
       <CardContent>
-        {edit ? (
-          <Textarea
-            value={editedContent}
-            onChange={(e) => setEditedContent?.(e.target.value)}
-          />
-        ) : (
-          <p>{content}</p>
-        )}
+        <Accordion type="single" collapsible>
+          <AccordionItem value={`card-${id}`}>
+            <AccordionTrigger>Expand content</AccordionTrigger>
+            <AccordionContent>
+              {edit ? (
+                <Textarea
+                  value={editedContent}
+                  onChange={(e) => setEditedContent?.(e.target.value)}
+                />
+              ) : (
+                <p>{content}</p>
+              )}
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </CardContent>
       <CardFooter>
         <p>{footer}</p>

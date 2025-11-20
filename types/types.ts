@@ -1,5 +1,8 @@
 import { generateSchema, loginSchema, registerSchema } from '@/lib/schemas';
-import { Content } from '@/prisma/app/generated/prisma/client/client';
+import {
+  Content,
+  ContentType,
+} from '@/prisma/app/generated/prisma/client/client';
 import z from 'zod';
 
 export type ContentData = {
@@ -17,6 +20,12 @@ export type ContentFullData = {
   contents?: Content[];
 };
 
+export type ContentDetailsData = {
+  success: boolean;
+  message: string;
+  content?: Content | null;
+};
+
 export type CardDataProps = {
   id: number | string;
   title: string;
@@ -25,6 +34,14 @@ export type CardDataProps = {
   footer: string;
   action?: React.ReactNode;
   icon?: React.ReactNode;
+};
+
+export type ExportFile = {
+  title: string | undefined;
+  content: string;
+  createdAt: string | undefined;
+  contentType: ContentType | undefined;
+  model: string | undefined;
 };
 
 export type RegisterData = z.infer<typeof registerSchema>;

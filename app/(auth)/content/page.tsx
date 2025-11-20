@@ -8,14 +8,17 @@ import type { Content } from '@/prisma/app/generated/prisma/client/client';
 import { ContentFullData } from '@/types/types';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
-import CardComponent from '../dashboard/card';
+import CardComponent from '../../../components/card';
 import { ContentActions } from '@/components/content-actions';
 import { SetStateAction, useMemo, useState } from 'react';
 import DeleteContentDialog from '@/components/delete-content-dialog';
 import { toast, Toaster } from 'sonner';
 import { Input } from '@/components/ui/input';
+import { useRouter } from 'next/navigation';
+import { ContentSkeleton } from '@/components/loaders/content-skeleton';
 
 export default function Content() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [editingCardId, setEditingCardId] = useState<string | null>(null);
   const [editedContents, setEditedContents] = useState<Record<string, string>>(
@@ -44,11 +47,7 @@ export default function Content() {
   }, [data?.contents, searchQuery]);
 
   if (isLoading) {
-    return (
-      <WrapperCenter>
-        <Spinner className="size-15" />
-      </WrapperCenter>
-    );
+    return <ContentSkeleton />;
   }
 
   if (!data || data.contents?.length === 0) {
@@ -131,6 +130,9 @@ export default function Content() {
                 footer: `CONTENT - created at ${content.createdAt.toLocaleDateString()}`,
                 action: (
                   <ContentActions
+                    handleView={() => {
+                      router.push(`/content/${content.id}`);
+                    }}
                     handleDelete={() => {
                       setDeleteContentId(content.id);
                       setShowDeleteDialog(true);

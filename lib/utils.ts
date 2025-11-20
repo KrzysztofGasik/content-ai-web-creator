@@ -1,4 +1,4 @@
-import { GenerateData } from '@/types/types';
+import { ExportFile, GenerateData } from '@/types/types';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -26,3 +26,36 @@ Write a ${contentType} about ${topic} in a ${tone} tone.
 
 ${context}
 `;
+
+export const exportAsMarkdown = ({
+  title,
+  content,
+  createdAt,
+  contentType,
+  model,
+}: ExportFile) => {
+  const sanitizeTitle = title
+    ?.toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+
+  const markdown = `# ${title || 'No title'}
+
+**Created:** ${createdAt}
+**Type:** ${contentType?.toLowerCase().replace('_', ' ')}
+**Model:** ${model}
+
+## Content body
+
+${content}`.trim();
+
+  const blob = new Blob([markdown], { type: 'text/markdown' });
+  const urlObj = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = urlObj;
+  anchor.download = `${sanitizeTitle}.md`;
+  anchor.click();
+  URL.revokeObjectURL(urlObj);
+};
