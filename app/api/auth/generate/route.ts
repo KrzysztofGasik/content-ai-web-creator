@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
-import { GenerateData, generateSchema } from '@/lib/schemas';
+import { generateSchema } from '@/lib/schemas';
 import { createOpenAI } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { generatePromptText } from '@/lib/utils';
+import { extractValuesFromString, generatePromptText } from '@/lib/utils';
+import { getContentTemplateById, getContentTemplates } from '@/lib/actions';
 
 export async function POST(req: Request) {
   try {
@@ -20,14 +21,42 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
-    const { topic, contentType, tone, context } = parsedBody.data;
+    const { topic, contentType, tone, context, templateSelector, id } =
+      parsedBody.data;
 
-    const promptText = generatePromptText({
-      topic,
-      tone,
-      contentType,
-      context,
-    });
+    let promptText;
+
+    if (templateSelector && templateSelector !== 'none') {
+      const data = await getContentTemplateById(id as string);
+      if (!data.template) {
+        return NextResponse.json(
+          { success: false, message: 'Empty data' },
+          { status: 400 }
+        );
+      }
+      const { template } = data;
+
+      if (!template.promptTemplate) {
+        return NextResponse.json(
+          { success: false, message: 'Empty prompt template prop' },
+          { status: 400 }
+        );
+      }
+      const extractValues = extractValuesFromString({
+        text: template.promptTemplate as string,
+        topic,
+        tone,
+        context,
+      });
+      promptText = extractValues;
+    } else {
+      promptText = generatePromptText({
+        topic,
+        tone,
+        contentType,
+        context,
+      });
+    }
 
     const generateAnswer = streamText({
       messages: [{ role: 'user', content: promptText }],

@@ -110,7 +110,7 @@ export default function Content() {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       </div>
-      <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+      <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 w-full">
         {(filteredContent || []).map((content) => {
           const updateText = (newText: string) => {
             setEditedContents((prev) => ({

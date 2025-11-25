@@ -10,6 +10,8 @@ import { Label } from '@/components/ui/label';
 import { ContentDetailsActions } from '@/components/content-details-actions';
 import { Card, CardContent } from '@/components/ui/card';
 import { ExportFile } from '@/types/types';
+import { Separator } from '@/components/ui/separator';
+import { VersionHistory } from './version-history';
 
 type DetailsLeftSectionProps = {
   content: Content | null | undefined;
@@ -84,6 +86,8 @@ export const DetailsRightSection = ({
           isArchived={Boolean(content?.isArchived)}
           exportData={exportObject}
         />
+        <Separator />
+        <VersionHistory contentId={content?.id} />
       </CardContent>
     </Card>
   );

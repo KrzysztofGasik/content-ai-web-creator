@@ -13,6 +13,8 @@ export const loginSchema = z.object({
 });
 
 export const generateSchema = z.object({
+  templateSelector: z.string(),
+  id: z.string().optional(),
   topic: z.string(),
   contentType: z.enum(Object.values(ContentType)),
   tone: z.enum(['professional', 'casual', 'friendly']),

@@ -2,13 +2,11 @@
 
 import DeleteContentDialog from '@/components/delete-content-dialog';
 import { Label } from '@/components/ui/label';
-import { Spinner } from '@/components/ui/spinner';
-import { WrapperCenter } from '@/components/wrapper-center';
 import { getContentDetails } from '@/lib/actions';
 import type { ContentDetailsData } from '@/types/types';
 import { useQuery } from '@tanstack/react-query';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import { Toaster } from 'sonner';
 import { DetailsLeftSection } from './details-left-section';
@@ -20,7 +18,6 @@ import { ContentDetailsSkeleton } from '@/components/loaders/content-details-ske
 export default function ContentDetails() {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState('');
-  const router = useRouter();
   const params = useParams();
   const id = params.id as string;
   const { data, isLoading, isError } = useQuery<ContentDetailsData>({

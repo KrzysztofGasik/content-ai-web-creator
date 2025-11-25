@@ -109,7 +109,7 @@ export default function Login() {
           </div>
         </form>
       </Form>
-      <Toaster />
+      <Toaster position="top-center" />
     </Card>
   );
 }

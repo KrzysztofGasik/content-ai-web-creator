@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { generateSchema } from '@/lib/schemas';
 import { ContentType } from '@/prisma/app/generated/prisma/client/enums';
-import { GenerateData } from '@/types/types';
+import { ContentTemplate, GenerateData } from '@/types/types';
 import {
   Select,
   SelectContent,
@@ -25,9 +25,11 @@ import z from 'zod';
 export const FormComponent = ({
   form,
   onSubmit,
+  templates,
 }: {
   form: UseFormReturn<z.infer<typeof generateSchema>>;
   onSubmit: (data: GenerateData) => Promise<null | undefined>;
+  templates: ContentTemplate[] | null | undefined;
 }) => {
   return (
     <Form {...form}>
@@ -35,6 +37,38 @@ export const FormComponent = ({
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-5"
       >
+        <FormField
+          name="templateSelector"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <FormItem>
+              <FormLabel htmlFor={field.name}>Template</FormLabel>
+              <FormControl>
+                <Select
+                  {...field}
+                  value={field.value}
+                  onValueChange={(value) => {
+                    field.onChange(value);
+                    form.setValue('id', value === 'none' ? '' : value);
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select template type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={'none'}>None (custom)</SelectItem>
+                    {templates?.map((template) => (
+                      <SelectItem value={template._id} key={template._id}>
+                        {template.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              {fieldState.error && <FormMessage />}
+            </FormItem>
+          )}
+        />
         <FormField
           name="topic"
           control={form.control}

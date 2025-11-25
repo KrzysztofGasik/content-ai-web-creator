@@ -9,6 +9,13 @@ type PromptTextProps = {
   context: string | undefined;
 };
 
+type ExtractFromStringProps = {
+  text: string;
+  topic: string;
+  tone: GenerateData['tone'];
+  context: string | undefined;
+};
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -26,6 +33,18 @@ Write a ${contentType} about ${topic} in a ${tone} tone.
 
 ${context}
 `;
+
+export const extractValuesFromString = ({
+  text,
+  topic,
+  tone,
+  context,
+}: ExtractFromStringProps) => {
+  let modifyString = text.replace(/{topic}/g, topic);
+  modifyString = modifyString.replace(/{tone}/g, tone);
+  modifyString = modifyString.replace(/{context}/g, context || '');
+  return modifyString;
+};
 
 export const exportAsMarkdown = ({
   title,

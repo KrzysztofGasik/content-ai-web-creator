@@ -54,7 +54,9 @@ export default function CardComponent({
                   onChange={(e) => setEditedContent?.(e.target.value)}
                 />
               ) : (
-                <p>{content}</p>
+                <pre className="whitespace-pre-wrap break-words overflow-x-auto max-w-full">
+                  {content}
+                </pre>
               )}
             </AccordionContent>
           </AccordionItem>

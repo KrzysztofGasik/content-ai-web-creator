@@ -2,6 +2,7 @@ import { generateSchema, loginSchema, registerSchema } from '@/lib/schemas';
 import {
   Content,
   ContentType,
+  ContentVersion,
 } from '@/prisma/app/generated/prisma/client/client';
 import z from 'zod';
 
@@ -42,6 +43,28 @@ export type ExportFile = {
   createdAt: string | undefined;
   contentType: ContentType | undefined;
   model: string | undefined;
+};
+
+export type VersionsData = {
+  success: boolean;
+  message: string;
+  versions?: ContentVersion[] | null;
+};
+
+export type ContentTemplateData = {
+  success: boolean;
+  message: string;
+  templates?: ContentTemplate[] | null;
+};
+
+export type ContentTemplate = {
+  _id: string;
+  name: string;
+  description: string | null;
+  contentType: string;
+  promptTemplate: string;
+  defaultTone: string | null;
+  category: string | null;
 };
 
 export type RegisterData = z.infer<typeof registerSchema>;
