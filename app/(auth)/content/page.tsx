@@ -5,7 +5,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { WrapperCenter } from '@/components/wrapper-center';
 import { deleteContent, getUserContent, updateContent } from '@/lib/actions';
 import type { Content } from '@/prisma/app/generated/prisma/client/client';
-import { ContentFullData } from '@/types/types';
+import { ContentFullData, ContentTypeParams } from '@/types/types';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import CardComponent from '../../../components/card';
@@ -16,6 +16,9 @@ import { toast, Toaster } from 'sonner';
 import { Input } from '@/components/ui/input';
 import { useRouter } from 'next/navigation';
 import { ContentSkeleton } from '@/components/loaders/content-skeleton';
+import { useSetSearchParams } from '@/hooks/useSetSearchParams';
+import { Select } from '@/components/ui/select';
+import { SearchFilter } from './search-filter';
 
 export default function Content() {
   const router = useRouter();
@@ -27,9 +30,11 @@ export default function Content() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleteContentId, setDeleteContentId] = useState<string | null>(null);
   const { data: session } = useSession();
+  const { type, favorite, archived, handleParamsChange } = useSetSearchParams();
   const { data, isLoading } = useQuery<ContentFullData>({
-    queryKey: ['content', session?.user.id],
-    queryFn: () => getUserContent(),
+    queryKey: ['content', session?.user.id, type, favorite, archived],
+    queryFn: () =>
+      getUserContent({ type: type as ContentTypeParams, favorite, archived }),
   });
   const queryClient = useQueryClient();
 
@@ -50,9 +55,9 @@ export default function Content() {
     return <ContentSkeleton />;
   }
 
-  if (!data || data.contents?.length === 0) {
+  if (!data) {
     return (
-      <Label>No content? Just go to Generate Content and create some :)</Label>
+      <div>No content? Just go to Generate Content and create some :)</div>
     );
   }
 
@@ -102,14 +107,12 @@ export default function Content() {
 
   return (
     <>
-      <div className="flex w-full max-w-sm items-center gap-2 my-5">
-        <Input
-          type="search"
-          placeholder="Search content..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-      </div>
+      <SearchFilter
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        params={{ type, favorite, archived }}
+        handleParamsChange={handleParamsChange}
+      />
       <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 w-full">
         {(filteredContent || []).map((content) => {
           const updateText = (newText: string) => {
@@ -179,6 +182,11 @@ export default function Content() {
         )}
         <Toaster position="top-center" />
       </section>
+      {data?.contents?.length === 0 && (
+        <WrapperCenter>
+          <h3 className="text-center">No content</h3>
+        </WrapperCenter>
+      )}
     </>
   );
 }

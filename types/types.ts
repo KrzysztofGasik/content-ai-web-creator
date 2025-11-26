@@ -67,6 +67,14 @@ export type ContentTemplate = {
   category: string | null;
 };
 
+export type ContentTypeParams = ContentType | 'ALL';
+
+export type SearchParamsProps = {
+  newType?: ContentTypeParams;
+  favorite?: boolean;
+  archived?: boolean;
+};
+
 export type RegisterData = z.infer<typeof registerSchema>;
 export type LoginData = z.infer<typeof loginSchema>;
 export type GenerateData = z.infer<typeof generateSchema>;

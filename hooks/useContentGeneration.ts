@@ -55,7 +55,7 @@ export default function useContentGeneration() {
       reader.releaseLock();
       const saveResult = await saveGeneratedContent({
         data: {
-          title: data.topic,
+          title: data.topic || 'No topic',
           type: data.contentType,
           prompt: generatePromptText({
             topic: data.topic,

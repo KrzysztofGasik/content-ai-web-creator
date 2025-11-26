@@ -3,8 +3,14 @@
 import { getServerSession } from 'next-auth';
 import { prisma } from './prisma';
 import { authOptions } from './auth';
-import { ContentData, ContentTemplate, UpdateData } from '@/types/types';
+import {
+  ContentData,
+  ContentTemplate,
+  ContentTypeParams,
+  UpdateData,
+} from '@/types/types';
 import { client } from '../sanity/lib/client';
+import { ContentType } from '@/prisma/app/generated/prisma/client/enums';
 
 export async function saveGeneratedContent({ data }: ContentData) {
   try {
@@ -73,11 +79,27 @@ export async function updateContent({ contentId, editedContent }: UpdateData) {
   }
 }
 
-export async function getUserContent() {
+export async function getUserContent(filters: {
+  type: ContentTypeParams;
+  favorite: boolean;
+  archived: boolean;
+}) {
   try {
     const { session } = await getUserSession();
+    const { type, favorite, archived } = filters;
+    const where: any = { userId: session.user.id };
+
+    if (type !== 'ALL') {
+      where.type = filters.type;
+    }
+    if (favorite === true) {
+      where.isFavorite = filters.favorite;
+    }
+    if (archived === true) {
+      where.isArchived = filters.archived;
+    }
     const contents = await prisma.content.findMany({
-      where: { userId: session.user.id },
+      where,
       orderBy: { createdAt: 'desc' },
     });
 
