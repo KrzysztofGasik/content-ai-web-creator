@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import Image from 'next/image';
 import Link from 'next/link';
 import CardComponent from '../components/card';
 import { PenTool, Share2, Sparkles } from 'lucide-react';
@@ -14,7 +13,7 @@ export default function Home() {
           </h1>
           <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
             Create blog posts, social media content, and more with AI. No
-            writer's block, just endless creativity.
+            writers block, just endless creativity.
           </p>
           <div className="flex gap-3">
             <Button asChild>

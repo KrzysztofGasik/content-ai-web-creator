@@ -3,7 +3,7 @@
 import { SearchParamsProps } from '@/types/types';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export function useSetSearchParams() {
+export default function useSetSearchParams() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const type = searchParams.get('type') || 'ALL';

@@ -20,3 +20,9 @@ export const generateSchema = z.object({
   tone: z.enum(['professional', 'casual', 'friendly']),
   context: z.string().optional(),
 });
+
+export const uploadSchema = z.object({
+  filename: z.string(),
+  contentType: z.string(),
+  fileSize: z.number().optional(),
+});

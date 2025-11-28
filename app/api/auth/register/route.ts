@@ -1,5 +1,4 @@
 import { prisma } from '@/lib/prisma';
-import { z } from 'zod';
 import * as bcrypt from 'bcryptjs';
 import { NextResponse } from 'next/server';
 import { registerSchema } from '@/lib/schemas';

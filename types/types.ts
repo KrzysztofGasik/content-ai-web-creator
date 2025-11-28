@@ -1,4 +1,5 @@
 import { generateSchema, loginSchema, registerSchema } from '@/lib/schemas';
+import { Image } from '@/prisma/app/generated/prisma/client/browser';
 import {
   Content,
   ContentType,
@@ -73,6 +74,30 @@ export type SearchParamsProps = {
   newType?: ContentTypeParams;
   favorite?: boolean;
   archived?: boolean;
+};
+
+export type SaveImageMetadataProps = {
+  key: string;
+  bucket: string;
+  url: string;
+  filename: string;
+  size: number;
+  contentType: string;
+  userId: string;
+  contentId?: string | undefined;
+};
+
+export type ImageDataType = {
+  url: string;
+  publicUrl: string;
+  key: string;
+  bucket: string;
+};
+
+export type ImageContentData = {
+  success: boolean;
+  message: string;
+  images?: Image[] | null;
 };
 
 export type RegisterData = z.infer<typeof registerSchema>;

@@ -41,7 +41,7 @@ export default function useContentGeneration() {
         if (done) {
           break;
         }
-
+        // eslint-disable-next-line
         chunkCounter++;
 
         const chunk = decoder.decode(value, { stream: true });

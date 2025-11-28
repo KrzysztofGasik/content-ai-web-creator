@@ -22,7 +22,7 @@ type Props = {
   setIsEditing: React.Dispatch<SetStateAction<boolean>>;
 };
 
-export function useContentDetailsActions({
+export default function useContentDetailsActions({
   contentId,
   content,
   textContent,
@@ -68,6 +68,7 @@ export function useContentDetailsActions({
         toast.error('Error during attempt to add to favorites');
       }
     } catch (error) {
+      console.error(error);
       toast.error('Error during attempt to add to favorites');
     }
   };
@@ -86,6 +87,7 @@ export function useContentDetailsActions({
         toast.error('Error during attempt to add to archived');
       }
     } catch (error) {
+      console.error(error);
       toast.error('Error during attempt to add to archived');
     }
   };
@@ -112,6 +114,7 @@ export function useContentDetailsActions({
           toast.error('Error during attempt to update content');
         }
       } catch (error) {
+        console.error(error);
         toast.error('Error during attempt to update content');
       }
     }
@@ -129,6 +132,7 @@ export function useContentDetailsActions({
         toast.error('Error during content deleting');
       }
     } catch (error) {
+      console.error(error);
       toast.error('Error during content deleting');
     }
   };

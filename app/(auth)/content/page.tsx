@@ -1,7 +1,5 @@
 'use client';
 
-import { Label } from '@/components/ui/label';
-import { Spinner } from '@/components/ui/spinner';
 import { WrapperCenter } from '@/components/wrapper-center';
 import { deleteContent, getUserContent, updateContent } from '@/lib/actions';
 import type { Content } from '@/prisma/app/generated/prisma/client/client';
@@ -13,11 +11,9 @@ import { ContentActions } from '@/components/content-actions';
 import { SetStateAction, useMemo, useState } from 'react';
 import DeleteContentDialog from '@/components/delete-content-dialog';
 import { toast, Toaster } from 'sonner';
-import { Input } from '@/components/ui/input';
 import { useRouter } from 'next/navigation';
 import { ContentSkeleton } from '@/components/loaders/content-skeleton';
-import { useSetSearchParams } from '@/hooks/useSetSearchParams';
-import { Select } from '@/components/ui/select';
+import useSetSearchParams from '@/hooks/useSetSearchParams';
 import { SearchFilter } from './search-filter';
 
 export default function Content() {
@@ -81,6 +77,7 @@ export default function Content() {
         toast.error('Error during content deleting');
       }
     } catch (error) {
+      console.error(error);
       toast.error('Error during content deleting');
     }
   };
@@ -100,6 +97,7 @@ export default function Content() {
           toast.error('Error during attempt to update content');
         }
       } catch (error) {
+        console.error(error);
         toast.error('Error during attempt to update content');
       }
     }

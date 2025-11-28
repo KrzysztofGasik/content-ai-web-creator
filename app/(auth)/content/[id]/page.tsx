@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { Toaster } from 'sonner';
 import { DetailsLeftSection } from './details-left-section';
 import { DetailsRightSection } from './details-right-section';
-import { useContentDetailsActions } from '@/hooks/useContentDetailsActions';
+import useContentDetailsActions from '@/hooks/useContentDetailsActions';
 import { EmptyState } from '@/components/empty-state';
 import { ContentDetailsSkeleton } from '@/components/loaders/content-details-skeleton';
 

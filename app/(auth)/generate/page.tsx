@@ -4,7 +4,6 @@ import { Card } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { getContentTemplates, updateContent } from '@/lib/actions';
 import { generateSchema } from '@/lib/schemas';
-import { generatePromptText } from '@/lib/utils';
 import { ContentType } from '@/prisma/app/generated/prisma/client/enums';
 import { ContentTemplateData, GenerateData } from '@/types/types';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -71,6 +70,7 @@ export default function Generate() {
         });
         toast.success('Successfully updated content');
       } catch (error) {
+        console.error(error);
         toast.error('Error during attempt to update content');
       }
     }

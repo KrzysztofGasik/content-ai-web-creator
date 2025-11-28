@@ -44,3 +44,4 @@ next-env.d.ts
 contentforge_plan.md
 
 /app/generated/prisma
+secret.md

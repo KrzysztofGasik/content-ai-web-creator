@@ -1,6 +1,5 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import CardComponent from '../../../components/card';
 import { useSession } from 'next-auth/react';
 import { useQuery } from '@tanstack/react-query';
@@ -8,8 +7,7 @@ import { getUserContent } from '@/lib/actions';
 import { ContentFullData, ContentTypeParams } from '@/types/types';
 import { QuickActions } from '@/components/quick-actions';
 import { DashboardSkeleton } from '@/components/loaders/dashboard-skeleton';
-import { useSearchParams } from 'next/navigation';
-import { useSetSearchParams } from '@/hooks/useSetSearchParams';
+import useSetSearchParams from '@/hooks/useSetSearchParams';
 
 export default function Dashboard() {
   const { type, favorite, archived } = useSetSearchParams();

@@ -22,14 +22,15 @@ export const VersionHistory = ({
 }: {
   contentId: string | undefined;
 }) => {
-  if (!contentId) return;
   const [isRestoring, setIsRestoring] = useState(false);
   const { data, isLoading } = useQuery<VersionsData>({
     queryKey: ['content-version', contentId],
-    queryFn: () => getContentVersions(contentId),
+    queryFn: () => getContentVersions(contentId || ''),
   });
   const router = useRouter();
   const queryClient = useQueryClient();
+
+  if (!contentId) return;
 
   const handleRestore = async (versionId: string) => {
     try {
@@ -50,6 +51,7 @@ export const VersionHistory = ({
         setIsRestoring(false);
       }
     } catch (error) {
+      console.error(error);
       toast.error('Version restoration failed');
       setIsRestoring(false);
     }

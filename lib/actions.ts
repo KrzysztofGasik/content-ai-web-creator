@@ -1,16 +1,17 @@
 'use server';
 
-import { getServerSession } from 'next-auth';
+import { getServerSession, Session } from 'next-auth';
 import { prisma } from './prisma';
 import { authOptions } from './auth';
 import {
   ContentData,
   ContentTemplate,
   ContentTypeParams,
+  SaveImageMetadataProps,
   UpdateData,
 } from '@/types/types';
 import { client } from '../sanity/lib/client';
-import { ContentType } from '@/prisma/app/generated/prisma/client/enums';
+import { generateGetPreSignUrl } from './aws';
 
 export async function saveGeneratedContent({ data }: ContentData) {
   try {
@@ -25,6 +26,7 @@ export async function saveGeneratedContent({ data }: ContentData) {
       contentId: content.id,
     };
   } catch (error) {
+    console.error(error);
     return {
       success: false,
       message: 'Error during attempt to save content in db',
@@ -72,6 +74,7 @@ export async function updateContent({ contentId, editedContent }: UpdateData) {
 
     return { success: true, message: 'Content updated in DB' };
   } catch (error) {
+    console.error(error);
     return {
       success: false,
       message: 'Error during attempt to update content in db',
@@ -87,6 +90,7 @@ export async function getUserContent(filters: {
   try {
     const { session } = await getUserSession();
     const { type, favorite, archived } = filters;
+    // eslint-disable-next-line
     const where: any = { userId: session.user.id };
 
     if (type !== 'ALL') {
@@ -105,6 +109,7 @@ export async function getUserContent(filters: {
 
     return { success: true, message: 'Content fetched from DB', contents };
   } catch (error) {
+    console.error(error);
     return {
       success: false,
       message: 'Error during attempt to fetch content from db',
@@ -122,6 +127,7 @@ export async function deleteContent(contentId: string) {
 
     return { success: true, message: 'Content successfully deleted from DB' };
   } catch (error) {
+    console.error(error);
     return {
       success: false,
       message: 'Error during attempt to delete content from db',
@@ -139,6 +145,7 @@ export async function getContentDetails(contentId: string) {
 
     return { success: true, message: 'Content fetched from DB', content };
   } catch (error) {
+    console.error(error);
     return {
       success: false,
       message: 'Error during attempt to fetch content from db',
@@ -157,6 +164,7 @@ export async function toggleFavorite(contentId: string) {
 
     return { success: true, message: 'Content favorite status updated in DB' };
   } catch (error) {
+    console.error(error);
     return {
       success: false,
       message: 'Error during attempt to toggle favorite status in db',
@@ -175,6 +183,7 @@ export async function toggleArchived(contentId: string) {
 
     return { success: true, message: 'Content archived status updated in DB' };
   } catch (error) {
+    console.error(error);
     return {
       success: false,
       message: 'Error during attempt to toggle archived status in db',
@@ -197,6 +206,7 @@ export async function getContentVersions(contentId: string) {
       versions,
     };
   } catch (error) {
+    console.error(error);
     return {
       success: false,
       message: 'Error during attempt to get content versions in db',
@@ -227,6 +237,7 @@ export async function restoreContentVersion(
       message: 'Version restored successfully',
     };
   } catch (error) {
+    console.error(error);
     return {
       success: false,
       message: 'Version failed during attempt to restore',
@@ -234,7 +245,120 @@ export async function restoreContentVersion(
   }
 }
 
-async function getUserSession() {
+export async function saveImageMetadata({
+  key,
+  bucket,
+  url,
+  filename,
+  size,
+  contentType,
+  userId,
+  contentId,
+}: SaveImageMetadataProps) {
+  try {
+    await getUserSession();
+
+    const image = await prisma.image.create({
+      data: {
+        s3Bucket: bucket,
+        s3Key: key,
+        url,
+        filename,
+        size,
+        mimeType: contentType,
+        userId,
+        contentId: contentId || null,
+      },
+    });
+
+    return {
+      success: true,
+      message: 'Image saved in DB',
+      image,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: 'Image failed during attempt to save in DB',
+    };
+  }
+}
+
+export async function getContentImages(contentId: string) {
+  try {
+    const { verifyUser } = await verifyUserByContent(contentId);
+
+    const images = await prisma.image.findMany({
+      where: { userId: verifyUser.userId },
+    });
+
+    const imagesWithUrls = await Promise.all(
+      images.map(async (image) => ({
+        ...image,
+        url: await generateGetPreSignUrl({ key: image.s3Key }),
+      }))
+    );
+
+    return {
+      success: true,
+      message: 'Images fetched from DB',
+      images: imagesWithUrls,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: 'Fetching images from DB failed',
+    };
+  }
+}
+
+// Sanity actions
+
+export async function getContentTemplates() {
+  try {
+    const templates: ContentTemplate[] = await client.fetch(
+      '*[_type == "contentTemplate" && isActive == true] {_id, name,description,contentType,promptTemplate,defaultTone,category}'
+    );
+    return {
+      success: true,
+      message: 'Successfully fetched data from sanity',
+      templates,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: 'Error during fetching content templates from sanity',
+    };
+  }
+}
+
+export async function getContentTemplateById(id: string) {
+  try {
+    const template: ContentTemplate[] = await client.fetch(
+      `*[_type == "contentTemplate" && isActive == true && _id == "${id}"] {_id, name,description,contentType,promptTemplate,defaultTone,category}`
+    );
+    return {
+      success: true,
+      message: 'Successfully fetched template from sanity',
+      template: template[0],
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: 'Error during fetching content template from sanity',
+    };
+  }
+}
+
+// Generic functions
+
+export async function getUserSession(): Promise<{
+  session: Session;
+}> {
   const session = await getServerSession(authOptions);
   if (!session) {
     throw new Error('User not authenticated');
@@ -256,42 +380,4 @@ async function verifyUserByContent(contentId: string) {
   }
 
   return { verifyUser };
-}
-
-// Sanity actions
-
-export async function getContentTemplates() {
-  try {
-    const templates: ContentTemplate[] = await client.fetch(
-      '*[_type == "contentTemplate" && isActive == true] {_id, name,description,contentType,promptTemplate,defaultTone,category}'
-    );
-    return {
-      success: true,
-      message: 'Successfully fetched data from sanity',
-      templates,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      message: 'Error during fetching content templates from sanity',
-    };
-  }
-}
-
-export async function getContentTemplateById(id: string) {
-  try {
-    const template: ContentTemplate[] = await client.fetch(
-      `*[_type == "contentTemplate" && isActive == true && _id == "${id}"] {_id, name,description,contentType,promptTemplate,defaultTone,category}`
-    );
-    return {
-      success: true,
-      message: 'Successfully fetched template from sanity',
-      template: template[0],
-    };
-  } catch (error) {
-    return {
-      success: false,
-      message: 'Error during fetching content template from sanity',
-    };
-  }
 }

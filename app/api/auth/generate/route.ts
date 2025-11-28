@@ -5,11 +5,11 @@ import { streamText } from 'ai';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { extractValuesFromString, generatePromptText } from '@/lib/utils';
-import { getContentTemplateById, getContentTemplates } from '@/lib/actions';
+import { getContentTemplateById } from '@/lib/actions';
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOptions);
+    await getServerSession(authOptions);
     const openai = createOpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });

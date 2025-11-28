@@ -9,6 +9,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const session = useSession();
 
   useEffect(() => {
+    // eslint-disable-next-line
     setIsMounted(true);
   }, []);
 
