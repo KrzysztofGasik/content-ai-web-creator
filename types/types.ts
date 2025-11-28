@@ -1,10 +1,12 @@
-import { generateSchema, loginSchema, registerSchema } from '@/lib/schemas';
-import { Image } from '@/prisma/app/generated/prisma/client/browser';
 import {
-  Content,
-  ContentType,
-  ContentVersion,
-} from '@/prisma/app/generated/prisma/client/client';
+  generateImageSchema,
+  generateSchema,
+  loginSchema,
+  registerSchema,
+} from '@/lib/schemas';
+import { Image } from '@prisma/client';
+import { Content, ContentType, ContentVersion } from '@prisma/client';
+import { ImageGenerateParamsBase } from 'openai/resources/images.mjs';
 import z from 'zod';
 
 export type ContentData = {
@@ -32,7 +34,7 @@ export type CardDataProps = {
   id: number | string;
   title: string;
   description: string;
-  content: string;
+  content: string | Image;
   footer: string;
   action?: React.ReactNode;
   icon?: React.ReactNode;
@@ -100,6 +102,25 @@ export type ImageContentData = {
   images?: Image[] | null;
 };
 
+export type PromptTextProps = {
+  topic: string;
+  tone: GenerateData['tone'];
+  contentType: GenerateData['contentType'];
+  context: string | undefined;
+};
+
+export type ExtractFromStringProps = {
+  text: string;
+  topic: string;
+  tone: GenerateData['tone'];
+  context: string | undefined;
+};
+
+export type ImageSize = ImageGenerateParamsBase['size'];
+export type ImageQuality = ImageGenerateParamsBase['quality'];
+export type ImageStyle = ImageGenerateParamsBase['style'];
+
 export type RegisterData = z.infer<typeof registerSchema>;
 export type LoginData = z.infer<typeof loginSchema>;
 export type GenerateData = z.infer<typeof generateSchema>;
+export type ImageGenerateParams = z.infer<typeof generateImageSchema>;

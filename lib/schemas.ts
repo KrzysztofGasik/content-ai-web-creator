@@ -1,5 +1,6 @@
-import { ContentType } from '@/prisma/app/generated/prisma/client/enums';
+import { ContentType } from '@/prisma/generated/enums';
 import z from 'zod';
+import { imageQuality, imageSize, imageStyle } from './utils';
 
 export const registerSchema = z.object({
   email: z.email(),
@@ -25,4 +26,11 @@ export const uploadSchema = z.object({
   filename: z.string(),
   contentType: z.string(),
   fileSize: z.number().optional(),
+});
+
+export const generateImageSchema = z.object({
+  prompt: z.string(),
+  size: z.enum(imageSize).optional(),
+  quality: z.enum(imageQuality).optional(),
+  style: z.enum(imageStyle).optional(),
 });

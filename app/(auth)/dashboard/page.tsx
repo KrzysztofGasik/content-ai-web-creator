@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useQuery } from '@tanstack/react-query';
 import { getUserContent } from '@/lib/actions';
 import { ContentFullData, ContentTypeParams } from '@/types/types';
-import { QuickActions } from '@/components/quick-actions';
+import { QuickActions } from '@/components/actions/quick-actions';
 import { DashboardSkeleton } from '@/components/loaders/dashboard-skeleton';
 import useSetSearchParams from '@/hooks/useSetSearchParams';
 

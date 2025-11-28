@@ -1,9 +1,9 @@
 'use client';
 
-import { Content } from '@/prisma/app/generated/prisma/client/client';
+import { Content } from '@prisma/client';
 import { SetStateAction } from 'react';
 import { Badge } from '@/components/ui/badge';
-import { ContentDetailsActions } from '@/components/content-details-actions';
+import { ContentDetailsActions } from '@/components/actions/content-details-actions';
 import { Card, CardContent } from '@/components/ui/card';
 import { ExportFile, ImageContentData, ImageDataType } from '@/types/types';
 import { Separator } from '@/components/ui/separator';

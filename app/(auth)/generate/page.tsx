@@ -4,7 +4,6 @@ import { Card } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { getContentTemplates, updateContent } from '@/lib/actions';
 import { generateSchema } from '@/lib/schemas';
-import { ContentType } from '@/prisma/app/generated/prisma/client/enums';
 import { ContentTemplateData, GenerateData } from '@/types/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
@@ -16,8 +15,9 @@ import { Sparkle } from 'lucide-react';
 import { FormComponent } from './form';
 import useContentGeneration from '@/hooks/useContentGeneration';
 import { WrapperCenter } from '@/components/wrapper-center';
-import { GenerateActions } from '@/components/generate-actions';
+import { GenerateActions } from '@/components/actions/generate-actions';
 import { useQuery } from '@tanstack/react-query';
+import { ContentType } from '@prisma/client';
 
 export default function Generate() {
   const [editedContent, setEditedContent] = useState('');

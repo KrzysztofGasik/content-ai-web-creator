@@ -5,7 +5,7 @@ import {
   updateContent,
 } from '@/lib/actions';
 import { exportAsMarkdown } from '@/lib/utils';
-import { Content } from '@/prisma/app/generated/prisma/client/client';
+import { Content } from '@prisma/client';
 import { ExportFile } from '@/types/types';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';

@@ -9,8 +9,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { ContentType } from '@/prisma/app/generated/prisma/client/enums';
 import { ContentTypeParams, SearchParamsProps } from '@/types/types';
+import { ContentType } from '@prisma/client';
 import { SetStateAction } from 'react';
 
 type SearchFilterProps = {

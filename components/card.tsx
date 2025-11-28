@@ -18,6 +18,9 @@ import {
   AccordionContent,
   AccordionItem,
 } from './ui/accordion';
+import Image from 'next/image';
+import { Badge } from './ui/badge';
+import { filesize } from 'filesize';
 
 type CardProps = {
   data: CardDataProps;
@@ -48,15 +51,33 @@ export default function CardComponent({
           <AccordionItem value={`card-${id}`}>
             <AccordionTrigger>Expand content</AccordionTrigger>
             <AccordionContent>
-              {edit ? (
+              {edit && typeof content === 'string' ? (
                 <Textarea
                   value={editedContent}
                   onChange={(e) => setEditedContent?.(e.target.value)}
                 />
-              ) : (
+              ) : typeof content === 'string' ? (
                 <pre className="whitespace-pre-wrap break-words overflow-x-auto max-w-full">
-                  {content}
+                  {content as string}
                 </pre>
+              ) : null}
+              {typeof content === 'object' && (
+                <>
+                  <Image
+                    src={content.url}
+                    alt={content.filename}
+                    height={300}
+                    width={300}
+                    className="mx-auto"
+                  />
+                  <p className="p-3">Prompt: {content?.prompt}</p>
+                  <Badge className="p-3 mx-1" variant="outline">
+                    Size: {filesize(content?.size)}
+                  </Badge>
+                  <Badge className="p-3" variant="outline">
+                    Quality: {content?.quality}
+                  </Badge>
+                </>
               )}
             </AccordionContent>
           </AccordionItem>

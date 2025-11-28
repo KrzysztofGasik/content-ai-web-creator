@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Content } from '@/prisma/app/generated/prisma/client/client';
+import { Content } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { Star, Archive, ArchiveX } from 'lucide-react';
 import { SetStateAction } from 'react';

@@ -2,12 +2,11 @@
 
 import { WrapperCenter } from '@/components/wrapper-center';
 import { deleteContent, getUserContent, updateContent } from '@/lib/actions';
-import type { Content } from '@/prisma/app/generated/prisma/client/client';
 import { ContentFullData, ContentTypeParams } from '@/types/types';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import CardComponent from '../../../components/card';
-import { ContentActions } from '@/components/content-actions';
+import { ContentActions } from '@/components/actions/content-actions';
 import { SetStateAction, useMemo, useState } from 'react';
 import DeleteContentDialog from '@/components/delete-content-dialog';
 import { toast, Toaster } from 'sonner';

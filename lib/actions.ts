@@ -12,6 +12,7 @@ import {
 } from '@/types/types';
 import { client } from '../sanity/lib/client';
 import { generateGetPreSignUrl } from './aws';
+import { ContentVersion, Image } from '@prisma/client';
 
 export async function saveGeneratedContent({ data }: ContentData) {
   try {
@@ -65,7 +66,7 @@ export async function updateContent({ contentId, editedContent }: UpdateData) {
         take: contentVersionsForDelete,
       });
 
-      const toDelete = items.map((item) => item.id);
+      const toDelete = items.map((item: ContentVersion) => item.id);
 
       await prisma.contentVersion.deleteMany({
         where: { id: { in: toDelete } },
@@ -294,7 +295,7 @@ export async function getContentImages(contentId: string) {
     });
 
     const imagesWithUrls = await Promise.all(
-      images.map(async (image) => ({
+      images.map(async (image: Image) => ({
         ...image,
         url: await generateGetPreSignUrl({ key: image.s3Key }),
       }))
@@ -310,6 +311,34 @@ export async function getContentImages(contentId: string) {
     return {
       success: false,
       message: 'Fetching images from DB failed',
+    };
+  }
+}
+
+export async function getUserImages(userId: string) {
+  try {
+    const images = await prisma.image.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    const imagesWithUrls = await Promise.all(
+      images.map(async (image) => ({
+        ...image,
+        url: await generateGetPreSignUrl({ key: image.s3Key }),
+      }))
+    );
+
+    return {
+      success: true,
+      message: 'Images fetched from DB',
+      images: imagesWithUrls,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: 'Error during images fetched',
     };
   }
 }

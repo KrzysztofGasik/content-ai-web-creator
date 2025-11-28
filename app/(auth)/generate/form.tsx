@@ -10,7 +10,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { generateSchema } from '@/lib/schemas';
-import { ContentType } from '@/prisma/app/generated/prisma/client/enums';
+import { ContentType } from '@prisma/client';
 import { ContentTemplate, GenerateData } from '@/types/types';
 import {
   Select,

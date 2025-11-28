@@ -1,20 +1,11 @@
-import { ExportFile, GenerateData } from '@/types/types';
+import {
+  ExportFile,
+  ExtractFromStringProps,
+  PromptTextProps,
+} from '@/types/types';
+import { Image } from '@prisma/client';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-
-type PromptTextProps = {
-  topic: string;
-  tone: GenerateData['tone'];
-  contentType: GenerateData['contentType'];
-  context: string | undefined;
-};
-
-type ExtractFromStringProps = {
-  text: string;
-  topic: string;
-  tone: GenerateData['tone'];
-  context: string | undefined;
-};
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -78,3 +69,24 @@ ${content}`.trim();
   anchor.click();
   URL.revokeObjectURL(urlObj);
 };
+
+export const exportAsImage = (image: Image) => {
+  const anchor = document.createElement('a');
+  anchor.href = image.url;
+  anchor.download = image.filename;
+  anchor.target = '_blank';
+  anchor.click();
+};
+
+export const imageSize = [
+  '1024x1024',
+  'auto',
+  '1536x1024',
+  '1024x1536',
+  '256x256',
+  '512x512',
+  '1792x1024',
+  '1024x1792',
+] as const;
+export const imageQuality = ['auto', 'standard', 'hd', 'low', 'medium', 'high'];
+export const imageStyle = ['vivid', 'natural'];
