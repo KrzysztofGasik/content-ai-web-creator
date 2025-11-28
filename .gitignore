@@ -44,6 +44,5 @@ next-env.d.ts
 contentforge_plan.md
 
 /prisma/generated
-/prisma/migrations
 secret.md
-.cursor
+.cursor/
