@@ -10,11 +10,17 @@ export function QuickActions() {
       <Button variant="outline" onClick={() => router.push('/generate')}>
         Generate Content
       </Button>
+      <Button variant="outline" onClick={() => router.push('/generate/image')}>
+        Generate Image
+      </Button>
       <Button variant="outline" onClick={() => router.push('/projects/new')}>
         Create Project
       </Button>
       <Button variant="outline" onClick={() => router.push('/content')}>
         View All Content
+      </Button>
+      <Button variant="outline" onClick={() => router.push('/images')}>
+        View All Images
       </Button>
     </div>
   );

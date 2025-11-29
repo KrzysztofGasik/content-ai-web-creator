@@ -1,24 +1,19 @@
-'use client';
+import { Heading } from './heading';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
-import { useSession } from 'next-auth/react';
-import { SideMenu } from '@/components/side-menu';
-import { useEffect, useState } from 'react';
-
-export default function Layout({ children }: { children: React.ReactNode }) {
-  const [isMounted, setIsMounted] = useState(false);
-  const session = useSession();
-
-  useEffect(() => {
-    // eslint-disable-next-line
-    setIsMounted(true);
-  }, []);
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const session = await getServerSession(authOptions);
 
   return (
     <>
       <header>
         <nav className="flex justify-between px-4 py-2">
-          <h1 className="text-xl">ContentForge AI</h1>
-          {isMounted && <SideMenu data={session?.data} />}
+          <Heading session={session} />
         </nav>
       </header>
       <main className="flex flex-col justify-center items-center p-5">

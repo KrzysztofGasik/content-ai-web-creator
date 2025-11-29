@@ -13,25 +13,27 @@ type DeleteContentDialogProps = {
   open: boolean;
   onClose: () => void;
   onConfirm: (contentId: string) => Promise<void>;
-  deleteContentId: string | null;
+  deleteContentTypeId: string | null;
+  contentType: string;
 };
 
 export default function DeleteContentDialog({
   open,
   onClose,
   onConfirm,
-  deleteContentId,
+  deleteContentTypeId,
+  contentType,
 }: DeleteContentDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>
-            Are you sure you want to delete this content?
+            Are you sure you want to delete this {contentType}?
           </DialogTitle>
           <DialogDescription>
-            This action cannot be undone. This will permanently delete your
-            content and remove your data from database.
+            This action cannot be undone. This will permanently delete your{' '}
+            {contentType} and remove your data from database.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -43,8 +45,8 @@ export default function DeleteContentDialog({
           <Button
             variant="destructive"
             onClick={() => {
-              if (deleteContentId) {
-                onConfirm(deleteContentId);
+              if (deleteContentTypeId) {
+                onConfirm(deleteContentTypeId);
               }
             }}
           >

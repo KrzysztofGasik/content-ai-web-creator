@@ -174,7 +174,8 @@ export default function Content() {
             open={showDeleteDialog}
             onClose={() => setShowDeleteDialog(false)}
             onConfirm={handleDelete}
-            deleteContentId={deleteContentId}
+            deleteContentTypeId={deleteContentId}
+            contentType="content"
           />
         )}
         <Toaster position="top-center" />

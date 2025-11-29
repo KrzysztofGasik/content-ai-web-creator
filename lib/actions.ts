@@ -11,8 +11,9 @@ import {
   UpdateData,
 } from '@/types/types';
 import { client } from '../sanity/lib/client';
-import { generateGetPreSignUrl } from './aws';
+import { deleteImageFromBucket, generateGetPreSignUrl } from './aws';
 import { ContentVersion, Image } from '@prisma/client';
+import { revalidatePath } from 'next/cache';
 
 export async function saveGeneratedContent({ data }: ContentData) {
   try {
@@ -254,7 +255,13 @@ export async function saveImageMetadata({
   size,
   contentType,
   userId,
+  width,
+  height,
+  isGenerated,
   contentId,
+  prompt,
+  quality,
+  style,
 }: SaveImageMetadataProps) {
   try {
     await getUserSession();
@@ -268,9 +275,17 @@ export async function saveImageMetadata({
         size,
         mimeType: contentType,
         userId,
+        width,
+        height,
+        isGenerated,
         contentId: contentId || null,
+        prompt,
+        quality,
+        style,
       },
     });
+
+    revalidatePath('/images');
 
     return {
       success: true,
@@ -291,7 +306,7 @@ export async function getContentImages(contentId: string) {
     const { verifyUser } = await verifyUserByContent(contentId);
 
     const images = await prisma.image.findMany({
-      where: { userId: verifyUser.userId },
+      where: { userId: verifyUser.userId, contentId },
     });
 
     const imagesWithUrls = await Promise.all(
@@ -339,6 +354,101 @@ export async function getUserImages(userId: string) {
     return {
       success: false,
       message: 'Error during images fetched',
+    };
+  }
+}
+
+export async function attachImageToContent(contentId: string, imageId: string) {
+  try {
+    const { verifyUser } = await verifyUserByContent(contentId);
+
+    const image = await prisma.image.findUnique({
+      where: { id: imageId },
+    });
+
+    if (!image || image.userId !== verifyUser.userId) {
+      return {
+        success: false,
+        message: 'Did not found image for that user',
+      };
+    }
+
+    await prisma.image.update({
+      where: { id: imageId },
+      data: {
+        contentId,
+      },
+    });
+
+    return {
+      success: true,
+      message: 'Successfully attached image to content',
+    };
+  } catch (error) {
+    console.error('Error during attempt to attach image to content', error);
+    return {
+      success: false,
+      message: 'Error during attempt to attach image to content',
+    };
+  }
+}
+
+export async function getUnattachedImages(userId: string) {
+  try {
+    await getUserSession();
+
+    const images = await prisma.image.findMany({
+      where: { userId, contentId: null },
+    });
+
+    const imagesWithUrls = await Promise.all(
+      images.map(async (image) => ({
+        ...image,
+        url: await generateGetPreSignUrl({ key: image.s3Key }),
+      }))
+    );
+
+    return {
+      success: true,
+      message: 'Images fetched from DB',
+      images: imagesWithUrls,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: 'Error during images fetched',
+    };
+  }
+}
+
+export async function deleteImage(imageId: string) {
+  try {
+    await getUserSession();
+
+    const image = await prisma.image.findUnique({ where: { id: imageId } });
+    if (!image) {
+      return {
+        success: false,
+        message: 'Images not found in DB',
+      };
+    }
+
+    await deleteImageFromBucket({ key: image.s3Key });
+
+    await prisma.image.delete({ where: { id: imageId } });
+
+    revalidatePath('/images');
+
+    return {
+      success: true,
+      message: 'Images deleted from DB',
+    };
+  } catch (error) {
+    console.error('Error during attempt to delete image', error);
+    return {
+      success: false,
+      message: 'Error during attempt to delete image',
     };
   }
 }

@@ -86,7 +86,13 @@ export type SaveImageMetadataProps = {
   size: number;
   contentType: string;
   userId: string;
+  width: number;
+  height: number;
+  isGenerated: boolean;
   contentId?: string | undefined;
+  prompt?: string;
+  quality?: string;
+  style?: string;
 };
 
 export type ImageDataType = {

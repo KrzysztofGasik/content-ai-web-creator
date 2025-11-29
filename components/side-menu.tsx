@@ -28,12 +28,20 @@ const menuElements = [
     label: 'Generate Content',
   },
   {
+    path: '/generate/image',
+    label: 'Generate Image',
+  },
+  {
     path: '/projects/new',
     label: 'Create Project',
   },
   {
     path: '/content',
     label: 'View All Content',
+  },
+  {
+    path: '/images',
+    label: 'View All Images',
   },
 ];
 

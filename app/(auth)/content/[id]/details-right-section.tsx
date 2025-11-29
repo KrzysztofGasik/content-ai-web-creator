@@ -1,22 +1,24 @@
 'use client';
 
 import { Content } from '@prisma/client';
-import { SetStateAction } from 'react';
+import { SetStateAction, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { ContentDetailsActions } from '@/components/actions/content-details-actions';
 import { Card, CardContent } from '@/components/ui/card';
-import { ExportFile, ImageContentData, ImageDataType } from '@/types/types';
+import { ExportFile, ImageContentData } from '@/types/types';
 import { Separator } from '@/components/ui/separator';
 import { VersionHistory } from './version-history';
 import { Input } from '@/components/ui/input';
 import { LabelInputWrapper } from '@/components/label-input-wrapper';
 import { useSession } from 'next-auth/react';
 import useFileUpload from '@/hooks/useFileUpload';
-import { toast } from 'sonner';
-import { getContentImages, saveImageMetadata } from '@/lib/actions';
+import { getContentImages } from '@/lib/actions';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { ImagesGallerySkeleton } from '@/components/loaders/images-gallery-skeleton';
+import { uploadAndSaveFile } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import AttachImagesDialog from '@/components/attach-images-dialog';
 
 type DetailsLeftSectionProps = {
   content: Content | null | undefined;
@@ -51,6 +53,7 @@ export const DetailsRightSection = ({
   editedContent,
   isEditing,
 }: DetailsLeftSectionProps) => {
+  const [showAttachDialog, setShowAttachDialog] = useState(false);
   const session = useSession();
   const { isUploading, uploadFile } = useFileUpload();
   const contentId = content?.id as string;
@@ -61,46 +64,14 @@ export const DetailsRightSection = ({
   const queryClient = useQueryClient();
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (!session.data?.user?.id) {
-      toast.error('You must be logged in to upload images');
-      return;
-    }
-
-    const uploadResult = await uploadFile(file);
-
-    if (uploadResult.success) {
-      const { url, key, bucket } = uploadResult.data as ImageDataType;
-      const fileName = file.name;
-      const size = file.size;
-      const contentType = file.type;
-
-      const saveImageMetadataResult = await saveImageMetadata({
-        key,
-        bucket,
-        url,
-        filename: fileName,
-        size,
-        contentType,
-        userId: session.data?.user.id as string,
-        contentId: content?.id,
-      });
-
-      if (saveImageMetadataResult.success) {
-        toast.success('Successfully file uploaded');
-        queryClient.invalidateQueries({
-          queryKey: ['details-image', contentId],
-        });
-      } else {
-        toast.error(
-          `Error during file upload - ${saveImageMetadataResult.message}`
-        );
-      }
-    } else {
-      toast.error(`Error during file upload - ${uploadResult.error}`);
-    }
+    await uploadAndSaveFile({
+      e,
+      userId: session.data?.user?.id as string,
+      uploadFile,
+      contentId,
+      queryClient,
+      queryKey: ['details-image', contentId],
+    });
   };
 
   const exportObject = {
@@ -110,8 +81,6 @@ export const DetailsRightSection = ({
     contentType: content?.type,
     model: content?.model,
   };
-
-  // Finish loading skeleton
 
   return (
     <Card className="w-full">
@@ -146,6 +115,9 @@ export const DetailsRightSection = ({
           exportData={exportObject}
         />
         <Separator className="my-6" />
+        <Button onClick={() => setShowAttachDialog(true)}>
+          Attach from Gallery
+        </Button>
         <LabelInputWrapper label="Upload your images here">
           <Input
             type="file"
@@ -156,7 +128,7 @@ export const DetailsRightSection = ({
           {isLoading ? (
             <ImagesGallerySkeleton />
           ) : (
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-5 gap-3 mx-auto">
               {data?.images?.map((image) => (
                 <Image
                   src={image.url}
@@ -173,6 +145,14 @@ export const DetailsRightSection = ({
         <Separator className="my-6" />
         <VersionHistory contentId={content?.id} />
       </CardContent>
+      {showAttachDialog && (
+        <AttachImagesDialog
+          open={showAttachDialog}
+          onClose={() => setShowAttachDialog(false)}
+          contentId={content?.id as string}
+          userId={session.data?.user.id as string}
+        />
+      )}
     </Card>
   );
 };

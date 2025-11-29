@@ -1,4 +1,5 @@
 import {
+  DeleteObjectCommand,
   GetObjectCommand,
   PutObjectCommand,
   S3Client,
@@ -50,6 +51,27 @@ export const generatePreSignUrl = async ({
     return links;
   } catch (e) {
     console.error(e);
+    throw new Error('AWS_S3_BUCKET_NAME is not configured/defined');
+  }
+};
+
+export const deleteImageFromBucket = async ({
+  key,
+}: {
+  key: string | undefined;
+}) => {
+  try {
+    if (!key) {
+      throw new Error('Missing S3 key');
+    }
+    const deleteCommand = new DeleteObjectCommand({
+      Bucket: process.env.AWS_S3_BUCKET_NAME,
+      Key: key,
+    });
+    await s3Client.send(deleteCommand);
+    return 'Image successfully deleted';
+  } catch (error) {
+    console.error(error);
     throw new Error('AWS_S3_BUCKET_NAME is not configured/defined');
   }
 };

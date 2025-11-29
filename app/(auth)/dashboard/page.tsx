@@ -1,30 +1,30 @@
-'use client';
-
 import CardComponent from '../../../components/card';
-import { useSession } from 'next-auth/react';
-import { useQuery } from '@tanstack/react-query';
 import { getUserContent } from '@/lib/actions';
-import { ContentFullData, ContentTypeParams } from '@/types/types';
+import { ContentTypeParams } from '@/types/types';
 import { QuickActions } from '@/components/actions/quick-actions';
-import { DashboardSkeleton } from '@/components/loaders/dashboard-skeleton';
-import useSetSearchParams from '@/hooks/useSetSearchParams';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
-export default function Dashboard() {
-  const { type, favorite, archived } = useSetSearchParams();
-  const { data: session } = useSession();
-  const { data, isLoading } = useQuery<ContentFullData>({
-    queryKey: ['content', session?.user.id, type, favorite, archived],
-    queryFn: () =>
-      getUserContent({
-        type: type as ContentTypeParams,
-        favorite,
-        archived,
-      }),
+export default async function Dashboard({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    type?: string;
+    favorite?: string;
+    archived?: string;
+  }>;
+}) {
+  await getServerSession(authOptions);
+  const params = await searchParams;
+  const type = params.type;
+  const favorite = params.favorite;
+  const archived = params.archived;
+
+  const data = await getUserContent({
+    type: type as ContentTypeParams,
+    favorite: Boolean(favorite),
+    archived: Boolean(archived),
   });
-
-  if (isLoading) {
-    return <DashboardSkeleton />;
-  }
 
   return (
     <section className="flex flex-col lg:flex-row items-center lg:items-start w-full gap-5 p-10">
