@@ -19,6 +19,7 @@ import { ImagesGallerySkeleton } from '@/components/loaders/images-gallery-skele
 import { uploadAndSaveFile } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import AttachImagesDialog from '@/components/attach-images-dialog';
+import { Tags } from './tags';
 
 type DetailsLeftSectionProps = {
   content: Content | null | undefined;
@@ -118,7 +119,8 @@ export const DetailsRightSection = ({
         <Button onClick={() => setShowAttachDialog(true)}>
           Attach from Gallery
         </Button>
-        <LabelInputWrapper label="Upload your images here">
+        <p className="my-2">OR</p>
+        <LabelInputWrapper label="Upload locally your image">
           <Input
             type="file"
             accept="image/*"
@@ -144,6 +146,8 @@ export const DetailsRightSection = ({
         </LabelInputWrapper>
         <Separator className="my-6" />
         <VersionHistory contentId={content?.id} />
+        <Separator className="my-6" />
+        <Tags contentId={content?.id as string} />
       </CardContent>
       {showAttachDialog && (
         <AttachImagesDialog

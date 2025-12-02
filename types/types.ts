@@ -5,7 +5,7 @@ import {
   loginSchema,
   registerSchema,
 } from '@/lib/schemas';
-import { Image, Project } from '@prisma/client';
+import { Image, Project, Tag } from '@prisma/client';
 import { Content, ContentType, ContentVersion } from '@prisma/client';
 import { ImageGenerateParamsBase } from 'openai/resources/images.mjs';
 import z from 'zod';
@@ -72,12 +72,15 @@ export type ContentTemplate = {
 };
 
 export type ContentTypeParams = ContentType | 'ALL';
+export type SortOptions = 'newest' | 'oldest' | 'title-asc' | 'title-desc';
 
 export type SearchParamsProps = {
   project?: string;
   newType?: ContentTypeParams;
+  tags?: string[];
   favorite?: boolean;
   archived?: boolean;
+  sort?: SortOptions;
 };
 
 export type SaveImageMetadataProps = {
@@ -151,6 +154,20 @@ export type UserProjectType = {
   success: boolean;
   message: string;
   projects?: ProjectWithCount[] | undefined;
+};
+
+export type TagsData = {
+  success: boolean;
+  message: string;
+  tags?: Tag[] | undefined;
+};
+
+export type TagsWithContentData = {
+  success: boolean;
+  message: string;
+  content?: {
+    tags: Tag[] | undefined;
+  };
 };
 
 export type RegisterData = z.infer<typeof registerSchema>;

@@ -2,7 +2,7 @@
 
 import { WrapperCenter } from '@/components/wrapper-center';
 import { deleteContent, getUserContent, updateContent } from '@/lib/actions';
-import { ContentFullData, ContentTypeParams } from '@/types/types';
+import { ContentFullData, ContentTypeParams, SortOptions } from '@/types/types';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import CardComponent from '../../../components/card';
@@ -25,16 +25,27 @@ export default function Content() {
   );
   const { close, open, isOpen, deleteId } = useDialog();
   const { data: session } = useSession();
-  const { project, type, favorite, archived, handleParamsChange } =
+  const { project, type, tags, favorite, archived, sort, handleParamsChange } =
     useSetSearchParams();
   const { data, isLoading } = useQuery<ContentFullData>({
-    queryKey: ['content', session?.user.id, project, type, favorite, archived],
+    queryKey: [
+      'content',
+      session?.user.id,
+      project,
+      type,
+      tags,
+      favorite,
+      archived,
+      sort,
+    ],
     queryFn: () =>
       getUserContent({
         project,
         type: type as ContentTypeParams,
+        tags: tags as string[],
         favorite,
         archived,
+        sort: sort as SortOptions,
       }),
   });
   const queryClient = useQueryClient();
@@ -113,7 +124,14 @@ export default function Content() {
       <SearchFilter
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
-        params={{ project, type, favorite, archived }}
+        params={{
+          project,
+          type,
+          tags,
+          favorite,
+          archived,
+          sort: sort as SortOptions,
+        }}
         handleParamsChange={handleParamsChange}
       />
       <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 w-full">

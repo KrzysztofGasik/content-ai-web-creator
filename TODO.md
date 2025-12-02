@@ -1,2 +1,1 @@
-1. Create image details page
-2. Change where using image in card to component image card
+Day 8 completed! Ready for Day 9-10.

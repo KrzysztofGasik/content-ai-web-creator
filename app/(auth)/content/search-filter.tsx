@@ -1,6 +1,18 @@
 import { LabelInputWrapper } from '@/components/label-input-wrapper';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import {
+  Command,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
 import { Input } from '@/components/ui/input';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import {
   Select,
   SelectContent,
@@ -9,8 +21,13 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { getUserProjects } from '@/lib/actions';
-import { ContentTypeParams, SearchParamsProps } from '@/types/types';
+import { getAllTags, getUserProjects } from '@/lib/actions';
+import {
+  ContentTypeParams,
+  SearchParamsProps,
+  SortOptions,
+  TagsData,
+} from '@/types/types';
 import { ContentType } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
@@ -20,15 +37,20 @@ type SearchFilterProps = {
   searchQuery: string;
   setSearchQuery: React.Dispatch<SetStateAction<string>>;
   params: {
-    project: string;
+    project?: string;
     type?: string;
+    tags?: string[];
     favorite?: boolean;
     archived?: boolean;
+    sort?: SortOptions;
   };
   handleParamsChange: ({
+    project,
     newType,
+    tags,
     favorite,
     archived,
+    sort,
   }: SearchParamsProps) => void;
 };
 
@@ -43,6 +65,26 @@ export const SearchFilter = ({
     queryKey: ['projects', session?.user.id as string],
     queryFn: () => getUserProjects(session?.user.id as string),
   });
+  const { data: allTagsData } = useQuery<TagsData>({
+    queryKey: ['all-tags'],
+    queryFn: () => getAllTags(),
+  });
+
+  const toggleTag = (tagName: string) => {
+    const currentTags = params.tags || [];
+    const updatedArray = currentTags.includes(tagName)
+      ? currentTags.filter((item) => item !== tagName)
+      : [...currentTags, tagName];
+    handleParamsChange({
+      project: params.project,
+      newType: params.type as ContentTypeParams,
+      tags: updatedArray,
+      favorite: params.favorite,
+      archived: params.archived,
+      sort: params.sort,
+    });
+  };
+
   return (
     <>
       <LabelInputWrapper>
@@ -60,7 +102,6 @@ export const SearchFilter = ({
         <div className="flex gap-4">
           <LabelInputWrapper label="Project">
             <Select
-              name="content-type-input"
               value={params.project}
               onValueChange={(value) => handleParamsChange({ project: value })}
             >
@@ -79,7 +120,6 @@ export const SearchFilter = ({
           </LabelInputWrapper>
           <LabelInputWrapper label="Content">
             <Select
-              name="content-type-input"
               value={params.type}
               onValueChange={(value) =>
                 handleParamsChange({ newType: value as ContentTypeParams })
@@ -89,7 +129,7 @@ export const SearchFilter = ({
                 <SelectValue placeholder="Select content type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value={'ALL'}>ALL</SelectItem>
+                <SelectItem value={'ALL'}>All content</SelectItem>
                 {Object.values(ContentType)?.map((content) => (
                   <SelectItem value={content} key={content}>
                     {content.replace(/_/g, ' ')}
@@ -97,6 +137,29 @@ export const SearchFilter = ({
                 ))}
               </SelectContent>
             </Select>
+          </LabelInputWrapper>
+          <LabelInputWrapper label="Tags">
+            <Popover>
+              <PopoverTrigger className="text-sm">
+                Select Tags ({params?.tags?.length} selected)
+              </PopoverTrigger>
+              <PopoverContent>
+                <Command>
+                  <CommandInput />
+                  <CommandList>
+                    {allTagsData?.tags?.map((tag) => (
+                      <CommandItem key={tag.id}>
+                        <Checkbox
+                          checked={params?.tags?.includes(tag.name)}
+                          onCheckedChange={() => toggleTag(tag.name)}
+                        />
+                        {tag.name}
+                      </CommandItem>
+                    ))}
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
           </LabelInputWrapper>
           <LabelInputWrapper label="Archived">
             <Button
@@ -125,6 +188,24 @@ export const SearchFilter = ({
             >
               Favorite
             </Button>
+          </LabelInputWrapper>
+          <LabelInputWrapper label="Sort">
+            <Select
+              value={params.sort || 'newest'}
+              onValueChange={(value) =>
+                handleParamsChange({ ...params, sort: value as SortOptions })
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="newest">Newest first</SelectItem>
+                <SelectItem value="oldest">Oldest first</SelectItem>
+                <SelectItem value="title-asc">Title A-Z</SelectItem>
+                <SelectItem value="title-desc">Title Z-A</SelectItem>
+              </SelectContent>
+            </Select>
           </LabelInputWrapper>
         </div>
       </div>
