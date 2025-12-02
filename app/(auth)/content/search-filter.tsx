@@ -9,14 +9,18 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
+import { getUserProjects } from '@/lib/actions';
 import { ContentTypeParams, SearchParamsProps } from '@/types/types';
 import { ContentType } from '@prisma/client';
+import { useQuery } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
 import { SetStateAction } from 'react';
 
 type SearchFilterProps = {
   searchQuery: string;
   setSearchQuery: React.Dispatch<SetStateAction<string>>;
   params: {
+    project: string;
     type?: string;
     favorite?: boolean;
     archived?: boolean;
@@ -34,6 +38,11 @@ export const SearchFilter = ({
   params,
   handleParamsChange,
 }: SearchFilterProps) => {
+  const { data: session } = useSession();
+  const { data: projectsData } = useQuery({
+    queryKey: ['projects', session?.user.id as string],
+    queryFn: () => getUserProjects(session?.user.id as string),
+  });
   return (
     <>
       <LabelInputWrapper>
@@ -49,6 +58,25 @@ export const SearchFilter = ({
       <div className="flex flex-col mb-6">
         <h4>Filter by:</h4>
         <div className="flex gap-4">
+          <LabelInputWrapper label="Project">
+            <Select
+              name="content-type-input"
+              value={params.project}
+              onValueChange={(value) => handleParamsChange({ project: value })}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select project" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={'ALL'}>All projects</SelectItem>
+                {projectsData?.projects?.map((project) => (
+                  <SelectItem value={project.id} key={project.id}>
+                    {project.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </LabelInputWrapper>
           <LabelInputWrapper label="Content">
             <Select
               name="content-type-input"

@@ -15,48 +15,31 @@ import { Button } from './ui/button';
 import { filesize } from 'filesize';
 import { Badge } from './ui/badge';
 import { exportAsImage } from '@/lib/utils';
-import { deleteImage } from '@/lib/actions';
-import { toast } from 'sonner';
-import { useQueryClient } from '@tanstack/react-query';
-import { useSession } from 'next-auth/react';
-import { useState } from 'react';
 import DeleteContentDialog from './delete-content-dialog';
+import useImageDelete from '@/hooks/useImageDelete';
 
 const empty = '-';
 
-export const CardImage = ({ image }: { image: ImageType }) => {
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [deleteContentId, setDeleteContentId] = useState<string | null>(null);
-  const queryClient = useQueryClient();
-  const { data: session } = useSession();
-  const handleDelete = async (imageId: string) => {
-    try {
-      setIsDeleting(true);
+export const CardImage = ({
+  image,
+  defaultWidth,
+  defaultHeight,
+}: {
+  image: ImageType;
+  defaultWidth: number;
+  defaultHeight: number;
+}) => {
+  const { handleDelete, isDeleting, open, close, isOpen, deleteId, router } =
+    useImageDelete();
 
-      const result = await deleteImage(imageId);
-      if (result.success) {
-        queryClient.invalidateQueries({
-          queryKey: ['user-images', session?.user?.id],
-        });
-        toast.success('Image deleted successfully');
-      } else {
-        toast.error('Error during attempt to delete image');
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error('Error during attempt to delete image');
-    } finally {
-      setShowDeleteDialog(false);
-      setIsDeleting(false);
-    }
-  };
   return (
     <Card className="w-full" id={image.id}>
       <CardHeader>
         <CardTitle className="truncate w-[200px]">{image.prompt}</CardTitle>
         <CardDescription className="flex flex-col gap-2">
-          <p className="truncate w-[340px]">Prompt: {image.prompt}</p>
+          <p className="truncate w-[350px] lg:w-[250px]">
+            Prompt: {image.prompt || empty}
+          </p>
           <p>Created: {image.createdAt.toLocaleDateString() || empty}</p>
           <p>File name: {image.filename || empty}</p>
           <p>File size: {filesize(image.size || empty)}</p>
@@ -71,14 +54,16 @@ export const CardImage = ({ image }: { image: ImageType }) => {
         <Image
           src={image.url}
           alt={image.filename}
-          height={200}
-          width={200}
+          height={defaultHeight}
+          width={defaultWidth}
           className="mx-auto"
         />
       </CardContent>
       <CardFooter className="flex justify-start gap-2">
         <CardAction>
-          <Button>View</Button>
+          <Button onClick={() => router.push(`images/${image.id}`)}>
+            View
+          </Button>
         </CardAction>
         <CardAction>
           <Button variant="outline" onClick={() => exportAsImage(image)}>
@@ -88,22 +73,19 @@ export const CardImage = ({ image }: { image: ImageType }) => {
         <CardAction>
           <Button
             variant="destructive"
-            onClick={() => {
-              setDeleteContentId(image.id);
-              setShowDeleteDialog(true);
-            }}
+            onClick={() => open(image.id)}
             disabled={isDeleting}
           >
             Delete
           </Button>
         </CardAction>
       </CardFooter>
-      {showDeleteDialog && (
+      {isOpen && (
         <DeleteContentDialog
-          open={showDeleteDialog}
-          onClose={() => setShowDeleteDialog(false)}
-          onConfirm={() => handleDelete(image.id)}
-          deleteContentTypeId={deleteContentId}
+          open={isOpen}
+          onClose={close}
+          onConfirm={() => handleDelete(deleteId as string)}
+          deleteContentTypeId={deleteId}
           contentType="image"
         />
       )}

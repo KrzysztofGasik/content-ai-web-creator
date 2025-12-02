@@ -43,6 +43,10 @@ const menuElements = [
     path: '/images',
     label: 'View All Images',
   },
+  {
+    path: '/projects',
+    label: 'View All Projects',
+  },
 ];
 
 export const SideMenu = ({ data }: { data: Session | null }) => {

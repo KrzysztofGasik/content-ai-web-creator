@@ -34,3 +34,9 @@ export const generateImageSchema = z.object({
   quality: z.enum(imageQuality).optional(),
   style: z.enum(imageStyle).optional(),
 });
+
+export const createProjectSchema = z.object({
+  name: z.string(),
+  description: z.string().optional(),
+  color: z.string().optional(),
+});

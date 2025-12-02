@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { CardDataProps } from '@/types/types';
-import { SetStateAction } from 'react';
+import { CSSProperties, SetStateAction } from 'react';
 import {
   Accordion,
   AccordionTrigger,
@@ -28,6 +28,7 @@ type CardProps = {
   editedContent?: string;
   setEditedContent?: React.Dispatch<SetStateAction<string>>;
   id?: string;
+  style?: CSSProperties;
 };
 
 export default function CardComponent({
@@ -36,10 +37,11 @@ export default function CardComponent({
   editedContent,
   setEditedContent,
   id,
+  style,
 }: CardProps) {
   const { title, icon, description, action, content, footer } = data;
   return (
-    <Card className="w-full" id={id}>
+    <Card className="w-full" id={id} style={style}>
       <CardHeader>
         {icon}
         <CardTitle>{title}</CardTitle>

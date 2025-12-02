@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation';
 import { ContentSkeleton } from '@/components/loaders/content-skeleton';
 import useSetSearchParams from '@/hooks/useSetSearchParams';
 import { SearchFilter } from './search-filter';
+import useDialog from '@/hooks/useDialog';
 
 export default function Content() {
   const router = useRouter();
@@ -22,14 +23,19 @@ export default function Content() {
   const [editedContents, setEditedContents] = useState<Record<string, string>>(
     {}
   );
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [deleteContentId, setDeleteContentId] = useState<string | null>(null);
+  const { close, open, isOpen, deleteId } = useDialog();
   const { data: session } = useSession();
-  const { type, favorite, archived, handleParamsChange } = useSetSearchParams();
+  const { project, type, favorite, archived, handleParamsChange } =
+    useSetSearchParams();
   const { data, isLoading } = useQuery<ContentFullData>({
-    queryKey: ['content', session?.user.id, type, favorite, archived],
+    queryKey: ['content', session?.user.id, project, type, favorite, archived],
     queryFn: () =>
-      getUserContent({ type: type as ContentTypeParams, favorite, archived }),
+      getUserContent({
+        project,
+        type: type as ContentTypeParams,
+        favorite,
+        archived,
+      }),
   });
   const queryClient = useQueryClient();
 
@@ -69,7 +75,7 @@ export default function Content() {
     try {
       const result = await deleteContent(contentId);
       if (result.success) {
-        setShowDeleteDialog(false);
+        close();
         toast.success('Content deleted successfully');
         queryClient.invalidateQueries({ queryKey: ['content'] });
       } else {
@@ -107,7 +113,7 @@ export default function Content() {
       <SearchFilter
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
-        params={{ type, favorite, archived }}
+        params={{ project, type, favorite, archived }}
         handleParamsChange={handleParamsChange}
       />
       <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 w-full">
@@ -133,10 +139,7 @@ export default function Content() {
                     handleView={() => {
                       router.push(`/content/${content.id}`);
                     }}
-                    handleDelete={() => {
-                      setDeleteContentId(content.id);
-                      setShowDeleteDialog(true);
-                    }}
+                    handleDelete={() => open(content.id)}
                     handleEdit={() =>
                       handleEdit(
                         content.id,
@@ -169,12 +172,12 @@ export default function Content() {
             />
           );
         })}
-        {showDeleteDialog && (
+        {isOpen && (
           <DeleteContentDialog
-            open={showDeleteDialog}
-            onClose={() => setShowDeleteDialog(false)}
-            onConfirm={handleDelete}
-            deleteContentTypeId={deleteContentId}
+            open={isOpen}
+            onClose={close}
+            onConfirm={() => handleDelete(deleteId as string)}
+            deleteContentTypeId={deleteId}
             contentType="content"
           />
         )}

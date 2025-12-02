@@ -22,6 +22,9 @@ export function QuickActions() {
       <Button variant="outline" onClick={() => router.push('/images')}>
         View All Images
       </Button>
+      <Button variant="outline" onClick={() => router.push('/projects')}>
+        View All Projects
+      </Button>
     </div>
   );
 }

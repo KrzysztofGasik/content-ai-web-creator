@@ -21,7 +21,12 @@ export default async function Images() {
 
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 w-full">
         {data?.images?.map((image) => (
-          <CardImage key={image.id} image={image} />
+          <CardImage
+            key={image.id}
+            image={image}
+            defaultHeight={200}
+            defaultWidth={200}
+          />
         ))}
       </section>
       <Toaster position="top-center" />

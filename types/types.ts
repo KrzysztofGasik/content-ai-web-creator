@@ -1,10 +1,11 @@
 import {
+  createProjectSchema,
   generateImageSchema,
   generateSchema,
   loginSchema,
   registerSchema,
 } from '@/lib/schemas';
-import { Image } from '@prisma/client';
+import { Image, Project } from '@prisma/client';
 import { Content, ContentType, ContentVersion } from '@prisma/client';
 import { ImageGenerateParamsBase } from 'openai/resources/images.mjs';
 import z from 'zod';
@@ -73,6 +74,7 @@ export type ContentTemplate = {
 export type ContentTypeParams = ContentType | 'ALL';
 
 export type SearchParamsProps = {
+  project?: string;
   newType?: ContentTypeParams;
   favorite?: boolean;
   archived?: boolean;
@@ -126,7 +128,33 @@ export type ImageSize = ImageGenerateParamsBase['size'];
 export type ImageQuality = ImageGenerateParamsBase['quality'];
 export type ImageStyle = ImageGenerateParamsBase['style'];
 
+export type CreateProjectProps = {
+  name: string;
+  description?: string | undefined;
+  color?: string | undefined;
+};
+
+export type CreateProjectType = {
+  success: boolean;
+  message: string;
+  project?: Project | undefined;
+};
+
+export type ProjectWithCount = Project & {
+  contents?: Content[];
+  _count: {
+    contents: number;
+  };
+};
+
+export type UserProjectType = {
+  success: boolean;
+  message: string;
+  projects?: ProjectWithCount[] | undefined;
+};
+
 export type RegisterData = z.infer<typeof registerSchema>;
 export type LoginData = z.infer<typeof loginSchema>;
 export type GenerateData = z.infer<typeof generateSchema>;
 export type ImageGenerateParams = z.infer<typeof generateImageSchema>;
+export type CreateProjectData = z.infer<typeof createProjectSchema>;
