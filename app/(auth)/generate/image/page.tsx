@@ -1,7 +1,7 @@
 'use client';
 
 import { Card } from '@/components/ui/card';
-import { getContentImages } from '@/lib/actions';
+import { getContentImages } from '@/lib/actions/image-actions';
 import { generateImageSchema } from '@/lib/schemas';
 import { ImageContentData, ImageSize } from '@/types/types';
 import { zodResolver } from '@hookform/resolvers/zod';

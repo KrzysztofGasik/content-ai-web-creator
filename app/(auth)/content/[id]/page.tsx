@@ -1,4 +1,4 @@
-import { getContentDetails } from '@/lib/actions';
+import { getContentDetails } from '@/lib/actions/content-actions';
 import { EmptyState } from '@/components/empty-state';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';

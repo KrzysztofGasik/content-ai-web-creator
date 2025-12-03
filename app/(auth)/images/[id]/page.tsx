@@ -1,5 +1,5 @@
 import { EmptyState } from '@/components/empty-state';
-import { getUserImageById } from '@/lib/actions';
+import { getUserImageById } from '@/lib/actions/image-actions';
 import { authOptions } from '@/lib/auth';
 import { getServerSession } from 'next-auth';
 import { ImageDetails } from './image-details';

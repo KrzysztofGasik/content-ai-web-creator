@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { generateImageSchema } from '@/lib/schemas';
 import { OpenAI } from 'openai';
-import { getUserSession } from '@/lib/actions';
+import { getUserSession } from '@/lib/actions/actions';
 import { randomUUID } from 'crypto';
 import { generateGetPreSignUrl, s3Client } from '@/lib/aws';
 import { PutObjectCommand } from '@aws-sdk/client-s3';

@@ -1,4 +1,4 @@
-import { deleteImage } from '@/lib/actions';
+import { deleteImage } from '@/lib/actions/image-actions';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';

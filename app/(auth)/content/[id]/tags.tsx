@@ -21,7 +21,7 @@ import {
   getAllTags,
   getContentTags,
   removeTagFromContent,
-} from '@/lib/actions';
+} from '@/lib/actions/tags-actions';
 import { cn } from '@/lib/utils';
 import { TagsData, TagsWithContentData } from '@/types/types';
 import { useQuery, useQueryClient } from '@tanstack/react-query';

@@ -10,7 +10,10 @@ import {
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { getContentVersions, restoreContentVersion } from '@/lib/actions';
+import {
+  getContentVersions,
+  restoreContentVersion,
+} from '@/lib/actions/content-actions';
 import { VersionsData } from '@/types/types';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';

@@ -1,7 +1,7 @@
 'use client';
 
 import { ContentSkeleton } from '@/components/loaders/content-skeleton';
-import { getUserProjects } from '@/lib/actions';
+import { getUserProjects } from '@/lib/actions/project-actions';
 import type { UserProjectType } from '@/types/types';
 import { useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';

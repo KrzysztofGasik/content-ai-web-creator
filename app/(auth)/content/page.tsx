@@ -1,7 +1,11 @@
 'use client';
 
 import { WrapperCenter } from '@/components/wrapper-center';
-import { deleteContent, getUserContent, updateContent } from '@/lib/actions';
+import {
+  deleteContent,
+  getUserContent,
+  updateContent,
+} from '@/lib/actions/content-actions';
 import { ContentFullData, ContentTypeParams, SortOptions } from '@/types/types';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';

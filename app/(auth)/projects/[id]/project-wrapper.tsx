@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import useDeleteProject from '@/hooks/useDeleteProject';
 import useDialog from '@/hooks/useDialog';
-import { assignContentToProject } from '@/lib/actions';
+import { assignContentToProject } from '@/lib/actions/project-actions';
 import { ProjectWithCount } from '@/types/types';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';

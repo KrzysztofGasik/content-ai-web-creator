@@ -14,7 +14,10 @@ import { Image as ImageType } from '@prisma/client';
 import Image from 'next/image';
 import { Checkbox } from './ui/checkbox';
 import { ImageContentData } from '@/types/types';
-import { attachImageToContent, getUnattachedImages } from '@/lib/actions';
+import {
+  attachImageToContent,
+  getUnattachedImages,
+} from '@/lib/actions/image-actions';
 import { toast, Toaster } from 'sonner';
 import { Spinner } from './ui/spinner';
 import { WrapperCenter } from './wrapper-center';

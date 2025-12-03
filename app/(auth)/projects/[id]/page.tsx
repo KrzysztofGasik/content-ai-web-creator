@@ -1,5 +1,5 @@
 import { EmptyState } from '@/components/empty-state';
-import { getUserProjectById } from '@/lib/actions';
+import { getUserProjectById } from '@/lib/actions/project-actions';
 import { authOptions } from '@/lib/auth';
 import { getServerSession } from 'next-auth';
 import { ProjectWrapper } from './project-wrapper';

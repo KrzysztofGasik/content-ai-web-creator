@@ -8,7 +8,7 @@ import type { Image } from '@prisma/client';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { toast } from 'sonner';
-import { saveImageMetadata } from './actions';
+import { saveImageMetadata } from './actions/image-actions';
 import { QueryClient } from '@tanstack/react-query';
 
 export function cn(...inputs: ClassValue[]) {

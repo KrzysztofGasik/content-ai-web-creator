@@ -1,4 +1,4 @@
-import { getUserSession } from '@/lib/actions';
+import { getUserSession } from '@/lib/actions/actions';
 import { generatePreSignUrl } from '@/lib/aws';
 import { uploadSchema } from '@/lib/schemas';
 import { NextResponse } from 'next/server';

@@ -1,4 +1,4 @@
-import { deleteProject } from '@/lib/actions';
+import { deleteProject } from '@/lib/actions/project-actions';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 

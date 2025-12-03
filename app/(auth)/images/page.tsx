@@ -1,4 +1,4 @@
-import { getUserImages } from '@/lib/actions';
+import { getUserImages } from '@/lib/actions/image-actions';
 import { Toaster } from 'sonner';
 import { CardImage } from '@/components/card-image';
 import { ImageInput } from './image-input';

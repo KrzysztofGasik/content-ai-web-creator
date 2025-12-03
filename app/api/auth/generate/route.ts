@@ -5,7 +5,7 @@ import { streamText } from 'ai';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { extractValuesFromString, generatePromptText } from '@/lib/utils';
-import { getContentTemplateById } from '@/lib/actions';
+import { getContentTemplateById } from '@/lib/actions/sanity-actions';
 
 export async function POST(req: Request) {
   try {

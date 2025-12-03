@@ -21,7 +21,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { getAllTags, getUserProjects } from '@/lib/actions';
+import { getAllTags } from '@/lib/actions/tags-actions';
+import { getUserProjects } from '@/lib/actions/project-actions';
 import {
   ContentTypeParams,
   SearchParamsProps,

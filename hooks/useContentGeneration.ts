@@ -1,4 +1,4 @@
-import { saveGeneratedContent } from '@/lib/actions';
+import { saveGeneratedContent } from '@/lib/actions/content-actions';
 import { generatePromptText } from '@/lib/utils';
 import { GenerateData } from '@/types/types';
 import { useState } from 'react';

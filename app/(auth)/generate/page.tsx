@@ -2,7 +2,8 @@
 
 import { Card } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
-import { getContentTemplates, updateContent } from '@/lib/actions';
+import { updateContent } from '@/lib/actions/content-actions';
+import { getContentTemplates } from '@/lib/actions/sanity-actions';
 import { generateSchema } from '@/lib/schemas';
 import { ContentTemplateData, GenerateData } from '@/types/types';
 import { zodResolver } from '@hookform/resolvers/zod';

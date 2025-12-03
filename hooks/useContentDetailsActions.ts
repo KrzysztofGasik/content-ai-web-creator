@@ -3,7 +3,7 @@ import {
   toggleArchived,
   toggleFavorite,
   updateContent,
-} from '@/lib/actions';
+} from '@/lib/actions/content-actions';
 import { exportAsMarkdown } from '@/lib/utils';
 import { Content } from '@prisma/client';
 import { ExportFile } from '@/types/types';

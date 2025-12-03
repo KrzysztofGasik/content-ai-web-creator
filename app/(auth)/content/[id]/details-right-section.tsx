@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { LabelInputWrapper } from '@/components/label-input-wrapper';
 import { useSession } from 'next-auth/react';
 import useFileUpload from '@/hooks/useFileUpload';
-import { getContentImages } from '@/lib/actions';
+import { getContentImages } from '@/lib/actions/image-actions';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { ImagesGallerySkeleton } from '@/components/loaders/images-gallery-skeleton';

@@ -1,6 +1,6 @@
 import CardComponent from '../../../components/card';
-import { getUserContent } from '@/lib/actions';
-import { ContentTypeParams } from '@/types/types';
+import { getUserContent } from '@/lib/actions/content-actions';
+import { ContentTypeParams, SortOptions } from '@/types/types';
 import { QuickActions } from '@/components/actions/quick-actions';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
@@ -9,21 +9,30 @@ export default async function Dashboard({
   searchParams,
 }: {
   searchParams: Promise<{
+    project?: string;
     type?: string;
+    tags?: string[];
     favorite?: string;
     archived?: string;
+    sort?: SortOptions;
   }>;
 }) {
   await getServerSession(authOptions);
   const params = await searchParams;
+  const project = params.project;
   const type = params.type;
+  const tags = params.tags;
   const favorite = params.favorite;
   const archived = params.archived;
+  const sort = params.sort;
 
   const data = await getUserContent({
+    project: project as string,
     type: type as ContentTypeParams,
+    tags: tags as string[],
     favorite: Boolean(favorite),
     archived: Boolean(archived),
+    sort: sort as SortOptions,
   });
 
   return (
@@ -34,14 +43,14 @@ export default async function Dashboard({
             id: 7,
             title: 'Quick actions',
             description: '',
-            content: `This quick actions will help you.`,
+            content: '',
             footer: '',
             action: <QuickActions />,
           }}
           key={7}
         />
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 w-full">
         {data?.contents?.map((card) => (
           <CardComponent
             data={{

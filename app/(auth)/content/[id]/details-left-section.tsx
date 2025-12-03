@@ -13,7 +13,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { assignContentToProject, getUserProjects } from '@/lib/actions';
+import {
+  assignContentToProject,
+  getUserProjects,
+} from '@/lib/actions/project-actions';
 import { useSession } from 'next-auth/react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';

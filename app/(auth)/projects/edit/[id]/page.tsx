@@ -1,7 +1,10 @@
 'use client';
 
 import { Card } from '@/components/ui/card';
-import { getUserProjectById, updateProject } from '@/lib/actions';
+import {
+  getUserProjectById,
+  updateProject,
+} from '@/lib/actions/project-actions';
 import { createProjectSchema } from '@/lib/schemas';
 import type { CreateProjectData, CreateProjectType } from '@/types/types';
 import { zodResolver } from '@hookform/resolvers/zod';
