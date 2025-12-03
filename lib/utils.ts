@@ -2,6 +2,9 @@ import {
   ExportFile,
   ExtractFromStringProps,
   ImageDataType,
+  ImageParams,
+  ImageQualityParam,
+  ImageSizeParam,
   PromptTextProps,
 } from '@/types/types';
 import type { Image } from '@prisma/client';
@@ -195,4 +198,26 @@ export async function extractImageDim(
   );
 
   return result;
+}
+
+export function calculateImageTokens(params: ImageParams): number {
+  // Token equivalents based on OpenAI pricing
+  // Assuming 1000 tokens ≈ $0.002 (GPT-3.5 pricing)
+
+  const costMap: Record<ImageSizeParam, Record<ImageQualityParam, number>> = {
+    '1024x1024': {
+      standard: 20000, // $0.04
+      hd: 40000, // $0.08
+    },
+    '1024x1792': {
+      standard: 40000, // $0.08
+      hd: 60000, // $0.12
+    },
+    '1792x1024': {
+      standard: 40000, // $0.08
+      hd: 60000, // $0.12
+    },
+  };
+
+  return costMap[params.size]?.[params.quality] || 20000; // Default to standard cost
 }

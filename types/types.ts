@@ -11,7 +11,10 @@ import { ImageGenerateParamsBase } from 'openai/resources/images.mjs';
 import z from 'zod';
 
 export type ContentData = {
-  data: Pick<Content, 'title' | 'type' | 'prompt' | 'generatedText' | 'model'>;
+  data: Pick<
+    Content,
+    'title' | 'type' | 'prompt' | 'generatedText' | 'model' | 'tokens'
+  >;
 };
 
 export type UpdateData = {
@@ -168,6 +171,31 @@ export type TagsWithContentData = {
   content?: {
     tags: Tag[] | undefined;
   };
+};
+
+export type StatCardDataProps = {
+  id: number | string;
+  title: string;
+  description: string | React.ReactNode;
+  content: string | React.ReactNode;
+  footer: string;
+  action?: React.ReactNode;
+  icon?: React.ReactNode;
+};
+export type ChartItem = { date: string; content: number; images: number };
+export type ChartData = ChartItem[];
+export type ImageSizeParam = '1024x1024' | '1024x1792' | '1792x1024';
+export type ImageQualityParam = 'standard' | 'hd';
+export type ImageParams = {
+  size: ImageSizeParam;
+  quality: ImageQualityParam;
+};
+export type TokensData = {
+  totalCredits: number;
+  tokensUsed: number;
+  creditsRemaining: number;
+  contentTokens: number;
+  imageTokens: number;
 };
 
 export type RegisterData = z.infer<typeof registerSchema>;

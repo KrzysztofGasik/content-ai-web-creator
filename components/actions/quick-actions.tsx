@@ -25,6 +25,9 @@ export function QuickActions() {
       <Button variant="outline" onClick={() => router.push('/projects')}>
         View All Projects
       </Button>
+      <Button variant="outline" onClick={() => router.push('/analytics')}>
+        View Analytics
+      </Button>
     </div>
   );
 }

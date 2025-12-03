@@ -50,6 +50,9 @@ export const ImageDetails = ({ image }: { image: ImageType }) => {
         <Badge className="text-md" variant="outline">
           AI image style: {image?.style || empty}
         </Badge>
+        <Badge className="text-md" variant="outline">
+          AI image tokens: {image?.tokens || 0}
+        </Badge>
         <Separator className="my-5" />
         <Button
           variant="destructive"

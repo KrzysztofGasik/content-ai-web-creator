@@ -64,6 +64,7 @@ model Image {
   createdAt   DateTime @default(now())
   content     Content? @relation(fields: [contentId], references: [id])
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokens      Int?
 
   @@index([userId])
 }
@@ -96,6 +97,8 @@ model User {
   projects      Project[]
   accounts      Account[]
   sessions      Session[]
+  credits       Int       @default(1000000)
+  creditsUsed   Int       @default(0)
 
   @@map("users")
 }

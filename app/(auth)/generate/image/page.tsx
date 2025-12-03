@@ -1,7 +1,7 @@
 'use client';
 
 import { Card } from '@/components/ui/card';
-import { getContentImages } from '@/lib/actions/image-actions';
+import { getUserImages } from '@/lib/actions/image-actions';
 import { generateImageSchema } from '@/lib/schemas';
 import { ImageContentData, ImageSize } from '@/types/types';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,12 +21,12 @@ import { GenerateImageActions } from '@/components/actions/generate-image-action
 import { exportAsImage } from '@/lib/utils';
 
 export default function GenerateImage() {
-  const session = useSession();
+  const { data: session } = useSession();
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<Image | null>(null);
   const { data } = useQuery<ImageContentData>({
-    queryKey: ['content-templates'],
-    queryFn: () => getContentImages(session?.data?.user?.id as string),
+    queryKey: ['user-image'],
+    queryFn: () => getUserImages(session?.user?.id as string),
   });
 
   const form = useForm<z.infer<typeof generateImageSchema>>({

@@ -6,7 +6,14 @@ import { randomUUID } from 'crypto';
 import { generateGetPreSignUrl, s3Client } from '@/lib/aws';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { prisma } from '@/lib/prisma';
-import { ImageQuality, ImageSize, ImageStyle } from '@/types/types';
+import {
+  ImageQuality,
+  ImageQualityParam,
+  ImageSize,
+  ImageSizeParam,
+  ImageStyle,
+} from '@/types/types';
+import { calculateImageTokens } from '@/lib/utils';
 
 export async function POST(req: Request) {
   try {
@@ -60,6 +67,12 @@ export async function POST(req: Request) {
     const bucket = process.env.AWS_S3_BUCKET_NAME;
     const permanentUrl = `https://${bucket}.s3.${region}.amazonaws.com/${uniqueKey}`;
 
+    const width = parseInt(size?.split('x')[0] || '1024');
+    const height = parseInt(size?.split('x')[1] || '1024');
+    const tokens = calculateImageTokens({
+      size: `${width}x${height}` as ImageSizeParam,
+      quality: quality as ImageQualityParam,
+    });
     const image = await prisma.image.create({
       data: {
         userId: session.user.id,
@@ -69,13 +82,14 @@ export async function POST(req: Request) {
         filename: `dalle-${Date.now()}.png`,
         size: Buffer.from(imageBuffer).length, // file size in bytes
         mimeType: 'image/png',
-        width: parseInt(size?.split('x')[0] || '1024'), // extract from size string
-        height: parseInt(size?.split('x')[1] || '1024'),
+        width,
+        height,
         isGenerated: true,
         prompt: prompt,
         quality: quality || 'standard',
         style: style || 'vivid',
         model: 'dall-e-3',
+        tokens: tokens || 0,
       },
     });
 

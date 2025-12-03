@@ -10,49 +10,27 @@ export default function useContentGeneration() {
   const [savedContentId, setSavedContentId] = useState<string | null>(null);
 
   const generateContent = async (data: GenerateData) => {
-    const result = await fetch('/api/auth/generate', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!result.ok) {
-      toast.error('Error during sending query to AI');
-      return;
-    }
-
-    setGeneratedContent('');
-    setIsGenerating(true);
-
-    const reader = result.body?.getReader();
-    if (!reader) {
-      return null;
-    }
-    const decoder = new TextDecoder();
-    let finalContent = '';
     try {
-      let chunkCounter = 0;
+      setGeneratedContent('');
+      setIsGenerating(true);
 
-      while (true) {
-        const { done, value } = await reader.read();
+      const response = await fetch('/api/auth/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
 
-        if (done) {
-          break;
-        }
-        // eslint-disable-next-line
-        chunkCounter++;
-
-        const chunk = decoder.decode(value, { stream: true });
-        finalContent += chunk;
-        setGeneratedContent((prev) => prev + chunk);
+      if (!response.ok) {
+        toast.error('Error during sending query to AI');
+        return;
       }
-    } catch (error) {
-      console.error('Error during sending query to AI', error);
-    } finally {
-      setIsGenerating(false);
-      reader.releaseLock();
+
+      const result = await response.json();
+      const { content, tokens } = result;
+      setGeneratedContent(content);
+
       const saveResult = await saveGeneratedContent({
         data: {
           title: data.topic || 'No topic',
@@ -63,14 +41,19 @@ export default function useContentGeneration() {
             contentType: data.contentType,
             context: data.context,
           }),
-          generatedText: finalContent,
+          generatedText: content,
           model: 'gpt-3.5-turbo',
+          tokens: tokens || 0,
         },
       });
       if (saveResult.success && saveResult.contentId) {
         setSavedContentId(saveResult?.contentId);
       }
       toast.success('Successfully generated content to AI ');
+    } catch (error) {
+      console.error('Error during sending query to AI', error);
+    } finally {
+      setIsGenerating(false);
     }
   };
 

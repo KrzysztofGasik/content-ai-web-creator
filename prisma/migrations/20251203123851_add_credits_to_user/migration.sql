@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "users" ADD COLUMN     "credits" INTEGER NOT NULL DEFAULT 1000,
+ADD COLUMN     "creditsUsed" INTEGER NOT NULL DEFAULT 0;
