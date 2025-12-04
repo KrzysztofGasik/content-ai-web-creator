@@ -13,13 +13,23 @@ export function GenerateImageActions({
 }: GenerateImageActionsProps) {
   return (
     <div className="flex flex-col gap-3 w-full">
-      <Button className="w-full" onClick={handleDownload}>
+      <Button
+        className="transition-colors duration-200 w-full"
+        onClick={handleDownload}
+      >
         Download
       </Button>
-      <Button className="w-full" onClick={handleSave}>
+      <Button
+        className="transition-colors duration-200 w-full"
+        onClick={handleSave}
+      >
         Save
       </Button>
-      <Button variant="outline" onClick={handleRegenerate}>
+      <Button
+        variant="outline"
+        onClick={handleRegenerate}
+        className="transition-colors duration-200 w-full"
+      >
         Regenerate
       </Button>
     </div>

@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -19,6 +18,7 @@ import {
 import { UseFormReturn } from 'react-hook-form';
 import z from 'zod';
 import { imageQuality, imageSize, imageStyle } from '@/lib/utils';
+import { GenericButton } from '@/components/generic-button';
 
 export const FormComponent = ({
   form,
@@ -45,6 +45,7 @@ export const FormComponent = ({
                   id={field.name}
                   placeholder="Prompt"
                   autoComplete="off"
+                  className="transition-all duration-200 focus:scale-[1.01]"
                 />
               </FormControl>
               {fieldState.error && <FormMessage />}
@@ -136,9 +137,13 @@ export const FormComponent = ({
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={form.formState.isSubmitting}>
-          Generate image
-        </Button>
+        <GenericButton
+          label="Generate image"
+          loadingLabel="Generating image..."
+          type="submit"
+          disabled={form.formState.isSubmitting}
+          isLoading={form.formState.isSubmitting}
+        />
       </form>
     </Form>
   );

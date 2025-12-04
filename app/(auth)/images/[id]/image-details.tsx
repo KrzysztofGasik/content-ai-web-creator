@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import useImageDelete from '@/hooks/useImageDelete';
 import { Separator } from '@/components/ui/separator';
 import DeleteContentDialog from '@/components/delete-content-dialog';
+import { GenericButton } from '@/components/generic-button';
 
 const empty = '---';
 
@@ -16,16 +17,20 @@ export const ImageDetails = ({ image }: { image: ImageType }) => {
 
   return (
     <section className="flex flex-col lg:flex-row gap-4">
-      <div className="flex-1 lg:flex-[2]">
+      <div className="flex-1 lg:flex-[1]">
         <Image
           src={image?.url || ''}
           alt={image?.filename || 'empty file name'}
           width={image?.width || 300}
           height={image?.height || 300}
+          className="border rounded-lg"
         />
       </div>
       <div className="flex-1 lg:flex-[1] flex flex-col gap-4 items-start">
-        <Button onClick={() => router.push('/images')} className="w-full">
+        <Button
+          onClick={() => router.push('/images')}
+          className="transition-colors duration-200 w-full"
+        >
           Back to gallery
         </Button>
         <Separator className="my-5" />
@@ -54,14 +59,14 @@ export const ImageDetails = ({ image }: { image: ImageType }) => {
           AI image tokens: {image?.tokens || 0}
         </Badge>
         <Separator className="my-5" />
-        <Button
+        <GenericButton
+          label="Delete"
+          loadingLabel="Deleting..."
           variant="destructive"
           onClick={() => open(image?.id as string)}
           disabled={isDeleting}
           className="w-full"
-        >
-          Delete
-        </Button>
+        />
       </div>
 
       {isOpen && (

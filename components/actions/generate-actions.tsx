@@ -1,3 +1,4 @@
+import { GenericButton } from '../generic-button';
 import { Button } from '../ui/button';
 
 type GenerateActionsProps = {
@@ -7,6 +8,7 @@ type GenerateActionsProps = {
   generatedContent: string;
   editedContent: string;
   isEditing: boolean;
+  isSaving: boolean;
 };
 
 export function GenerateActions({
@@ -16,17 +18,26 @@ export function GenerateActions({
   generatedContent,
   editedContent,
   isEditing,
+  isSaving,
 }: GenerateActionsProps) {
   return (
     <div className="flex flex-col gap-2">
-      <Button onClick={() => handleCopy(generatedContent)}>Copy</Button>
-      <Button onClick={handleEdit}>{isEditing ? 'Cancel' : 'Edit'}</Button>
       <Button
-        onClick={handleSave}
-        disabled={generatedContent === editedContent}
+        onClick={() => handleCopy(generatedContent)}
+        className="transition-colors duration-200"
       >
-        Save
+        Copy
       </Button>
+      <Button onClick={handleEdit} className="transition-colors duration-200">
+        {isEditing ? 'Cancel' : 'Edit'}
+      </Button>
+      <GenericButton
+        label="Save"
+        loadingLabel="Saving..."
+        isLoading={isSaving}
+        onClick={handleSave}
+        disabled={generatedContent === editedContent || isSaving}
+      />
     </div>
   );
 }

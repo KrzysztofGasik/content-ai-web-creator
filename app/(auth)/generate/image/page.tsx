@@ -88,7 +88,7 @@ export default function GenerateImage() {
   };
 
   return (
-    <Card className="flex flex-col p-10 w-full justify-around md:flex-row">
+    <Card className="flex flex-col p-10 w-full lg:w-[50%] justify-around md:flex-row">
       <div className={`${data?.images ? 'flex-1' : 'w-1/2 mx-auto'}`}>
         <FormComponent form={form} onSubmit={onSubmit} />
         {isGenerating && (

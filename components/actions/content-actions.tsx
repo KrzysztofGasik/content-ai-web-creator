@@ -1,3 +1,4 @@
+import { GenericButton } from '../generic-button';
 import { Button } from '../ui/button';
 
 type ContentActionsProps = {
@@ -8,6 +9,7 @@ type ContentActionsProps = {
   generatedContent: string;
   editedContent: string | null;
   isEditing: boolean;
+  isSaving: boolean;
 };
 
 export function ContentActions({
@@ -18,18 +20,28 @@ export function ContentActions({
   generatedContent,
   editedContent,
   isEditing,
+  isSaving,
 }: ContentActionsProps) {
   return (
     <div className="flex flex-col gap-2">
-      <Button onClick={handleView}>View</Button>
-      <Button onClick={handleEdit}>{isEditing ? 'Cancel' : 'Edit'}</Button>
-      <Button
-        onClick={handleSave}
-        disabled={generatedContent === editedContent}
-      >
-        Save
+      <Button onClick={handleView} className="transition-colors duration-200">
+        View
       </Button>
-      <Button variant="destructive" onClick={handleDelete}>
+      <Button onClick={handleEdit} className="transition-colors duration-200">
+        {isEditing ? 'Cancel' : 'Edit'}
+      </Button>
+      <GenericButton
+        label="Save"
+        loadingLabel="Saving..."
+        isLoading={isSaving}
+        onClick={handleSave}
+        disabled={generatedContent === editedContent || isSaving}
+      />
+      <Button
+        variant="destructive"
+        onClick={handleDelete}
+        className="transition-colors duration-200"
+      >
         Delete
       </Button>
     </div>

@@ -80,7 +80,7 @@ export default function AttachImagesDialog({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="animate-in fade-in-0 zoom-in-95 duration-200 sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Select images</DialogTitle>
           <DialogDescription>
@@ -99,13 +99,18 @@ export default function AttachImagesDialog({
         />
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline" onClick={onClose}>
+            <Button
+              variant="outline"
+              onClick={onClose}
+              className="transition-colors duration-200"
+            >
               Cancel
             </Button>
           </DialogClose>
           <Button
             onClick={handleAttach}
             disabled={selectedImagesId.length === 0}
+            className="transition-colors duration-200"
           >
             Attach selected
           </Button>

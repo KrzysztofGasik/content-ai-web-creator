@@ -27,6 +27,7 @@ export default function Content() {
   const [editedContents, setEditedContents] = useState<Record<string, string>>(
     {}
   );
+  const [isSavingId, setIsSavingId] = useState<string | null>(null);
   const { close, open, isOpen, deleteId } = useDialog();
   const { data: session } = useSession();
   const { project, type, tags, favorite, archived, sort, handleParamsChange } =
@@ -104,6 +105,7 @@ export default function Content() {
 
   const handleSave = async (contentId: string) => {
     if (editedContents[contentId]) {
+      setIsSavingId(contentId);
       try {
         const result = await updateContent({
           contentId,
@@ -119,6 +121,8 @@ export default function Content() {
       } catch (error) {
         console.error(error);
         toast.error('Error during attempt to update content');
+      } finally {
+        setIsSavingId(null);
       }
     }
   };
@@ -138,7 +142,7 @@ export default function Content() {
         }}
         handleParamsChange={handleParamsChange}
       />
-      <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 w-full">
+      <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 w-full animate-in fade-in duration-500">
         {(filteredContent || []).map((content) => {
           const updateText = (newText: string) => {
             setEditedContents((prev) => ({
@@ -178,6 +182,7 @@ export default function Content() {
                       content.generatedText
                     }
                     isEditing={editingCardId === content.id}
+                    isSaving={isSavingId === content.id}
                   />
                 ),
                 icon: undefined,

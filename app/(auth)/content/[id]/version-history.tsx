@@ -90,7 +90,7 @@ export const VersionHistory = ({
                 {version.text}
               </pre>
               <Button
-                className="mt-4"
+                className="transition-colors duration-200 mt-4"
                 onClick={() => handleRestore(version.id)}
                 disabled={isRestoring}
               >

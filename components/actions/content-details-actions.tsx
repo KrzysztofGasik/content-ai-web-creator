@@ -1,6 +1,7 @@
 import { ExportFile } from '@/types/types';
 import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
+import { GenericButton } from '../generic-button';
 
 type ContentDetailsActionsProps = {
   handleCopy: (text: string) => void;
@@ -16,6 +17,7 @@ type ContentDetailsActionsProps = {
   isFavorite: boolean;
   isArchived: boolean;
   exportData: ExportFile;
+  isSaving: boolean;
 };
 
 export function ContentDetailsActions({
@@ -32,38 +34,63 @@ export function ContentDetailsActions({
   isFavorite,
   isArchived,
   exportData,
+  isSaving,
 }: ContentDetailsActionsProps) {
   return (
     <div className="flex flex-col gap-3 w-full">
-      <Button className="w-full" onClick={() => handleCopy(generatedContent)}>
+      <Button
+        className="transition-colors duration-200 w-full"
+        onClick={() => handleCopy(generatedContent)}
+      >
         Copy
       </Button>
-      <Button className="w-full" onClick={handleEdit}>
+      <Button
+        className="transition-colors duration-200 w-full"
+        onClick={handleEdit}
+      >
         {isEditing ? 'Cancel' : 'Edit'}
       </Button>
-      <Button
+      <GenericButton
+        label="Save"
+        loadingLabel="Saving..."
+        isLoading={isSaving}
         className="w-full"
         onClick={handleSave}
         disabled={
+          isSaving ||
           !editedContent ||
           editedContent === generatedContent ||
           editedContent.trim() === ''
         }
-      >
-        Save
-      </Button>
+      />
       <Separator className="my-4" />
-      <Button variant="outline" onClick={() => handleDownload(exportData)}>
+      <Button
+        variant="outline"
+        onClick={() => handleDownload(exportData)}
+        className="transition-colors duration-200"
+      >
         Download (.md)
       </Button>
-      <Button variant="outline" onClick={handleFavorite}>
+      <Button
+        variant="outline"
+        onClick={handleFavorite}
+        className="transition-colors duration-200"
+      >
         {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
       </Button>
-      <Button variant="outline" onClick={handleArchived}>
+      <Button
+        variant="outline"
+        onClick={handleArchived}
+        className="transition-colors duration-200"
+      >
         {isArchived ? 'Remove from archived' : 'Add to archived'}
       </Button>
       <Separator className="my-4" />
-      <Button onClick={handleDelete} variant="destructive">
+      <Button
+        onClick={handleDelete}
+        variant="destructive"
+        className="transition-colors duration-200"
+      >
         Delete
       </Button>
     </div>

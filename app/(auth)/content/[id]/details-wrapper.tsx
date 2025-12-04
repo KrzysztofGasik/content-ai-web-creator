@@ -33,6 +33,7 @@ export default function DetailsWrapper({
     setShowDeleteDialog,
     deleteContentId,
     setDeleteContentId,
+    isSaving,
   } = useContentDetailsActions({
     contentId: id,
     content,
@@ -72,6 +73,7 @@ export default function DetailsWrapper({
           isArchived={Boolean(content?.isArchived)}
           setDeleteContentId={setDeleteContentId}
           setShowDeleteDialog={setShowDeleteDialog}
+          isSaving={isSaving}
         />
       </div>
       {showDeleteDialog && (

@@ -76,7 +76,11 @@ export const SideMenu = ({ data }: { data: Session | null }) => {
         <DropdownMenuGroup className="flex flex-col items-start">
           {menuElements.map(({ path, label }) => (
             <DropdownMenuItem key={label}>
-              <Button variant="link" onClick={() => router.push(path)}>
+              <Button
+                variant="link"
+                onClick={() => router.push(path)}
+                className="transition-colors duration-200"
+              >
                 {label}
               </Button>
             </DropdownMenuItem>
@@ -85,6 +89,7 @@ export const SideMenu = ({ data }: { data: Session | null }) => {
         <DropdownMenuSeparator />
         <DropdownMenuLabel>
           <Button
+            className="transition-colors duration-200"
             onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
           >
             Theme {theme === 'light' ? <Moon /> : <Sun />}
@@ -93,6 +98,7 @@ export const SideMenu = ({ data }: { data: Session | null }) => {
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <Button
+            className="transition-colors duration-200"
             onClick={() => signOut({ redirect: true, callbackUrl: '/' })}
             variant="link"
           >

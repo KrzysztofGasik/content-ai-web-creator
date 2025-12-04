@@ -72,11 +72,13 @@ export const ProjectWrapper = ({
                 action: (
                   <div className="flex flex-col gap-2">
                     <Button
+                      className="transition-colors duration-200"
                       onClick={() => router.push(`/content/${content.id}`)}
                     >
                       View
                     </Button>
                     <Button
+                      className="transition-colors duration-200"
                       variant="destructive"
                       onClick={() => {
                         handleRemoveContent(content.id);

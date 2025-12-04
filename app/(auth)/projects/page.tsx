@@ -51,7 +51,7 @@ export default function Projects() {
   return (
     <>
       <SearchFilter searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-      <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 w-full">
+      <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 w-full animate-in fade-in duration-500">
         {filteredProjects.map((project) => {
           return (
             <CardComponent

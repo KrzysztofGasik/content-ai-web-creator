@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { GenericButton } from './generic-button';
 import { Button } from './ui/button';
 import {
   Dialog,
@@ -15,6 +17,7 @@ type DeleteContentDialogProps = {
   onConfirm: (contentId: string) => Promise<void>;
   deleteContentTypeId: string | null;
   contentType: string;
+  isDeletingProp?: boolean;
 };
 
 export default function DeleteContentDialog({
@@ -23,10 +26,18 @@ export default function DeleteContentDialog({
   onConfirm,
   deleteContentTypeId,
   contentType,
+  isDeletingProp,
 }: DeleteContentDialogProps) {
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDelete = async (contentId: string) => {
+    setIsDeleting(true);
+    await onConfirm(contentId);
+    setIsDeleting(false);
+  };
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="animate-in fade-in-0 zoom-in-95 duration-200 sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>
             Are you sure you want to delete this {contentType}?
@@ -38,20 +49,23 @@ export default function DeleteContentDialog({
         </DialogHeader>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline" onClick={onClose}>
+            <Button
+              variant="outline"
+              onClick={onClose}
+              className="transition-colors duration-200"
+            >
               Cancel
             </Button>
           </DialogClose>
-          <Button
+          <GenericButton
+            label="Delete"
+            loadingLabel="Deleting..."
+            isLoading={isDeletingProp || isDeleting}
+            type="button"
             variant="destructive"
-            onClick={() => {
-              if (deleteContentTypeId) {
-                onConfirm(deleteContentTypeId);
-              }
-            }}
-          >
-            Delete
-          </Button>
+            onClick={async () => handleDelete(deleteContentTypeId as string)}
+            disabled={isDeletingProp || isDeleting}
+          />
         </DialogFooter>
       </DialogContent>
     </Dialog>

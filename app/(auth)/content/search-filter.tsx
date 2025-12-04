@@ -95,6 +95,7 @@ export const SearchFilter = ({
           placeholder="Search content..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          className="transition-all duration-200 focus:scale-[1.01]"
         />
       </LabelInputWrapper>
       <Separator className="my-5 data-[orientation=horizontal]:w-[300px]" />
@@ -172,6 +173,7 @@ export const SearchFilter = ({
                 })
               }
               variant={params.archived ? 'default' : 'secondary'}
+              className="transition-colors duration-200"
             >
               Archived
             </Button>

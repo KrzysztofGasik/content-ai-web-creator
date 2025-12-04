@@ -76,6 +76,7 @@ export default function Register() {
                     id={field.name}
                     placeholder="Your username"
                     autoComplete="off"
+                    className="transition-all duration-200 focus:scale-[1.01]"
                   />
                 </FormControl>
                 {fieldState.error && <FormMessage />}
@@ -95,6 +96,7 @@ export default function Register() {
                     placeholder="Your email"
                     autoComplete="off"
                     type="email"
+                    className="transition-all duration-200 focus:scale-[1.01]"
                   />
                 </FormControl>
                 {fieldState.error && <FormMessage />}
@@ -114,13 +116,18 @@ export default function Register() {
                     placeholder="Your password"
                     autoComplete="off"
                     type="password"
+                    className="transition-all duration-200 focus:scale-[1.01]"
                   />
                 </FormControl>
                 {fieldState.error && <FormMessage />}
               </FormItem>
             )}
           />
-          <Button type="submit" disabled={form.formState.isSubmitting}>
+          <Button
+            type="submit"
+            disabled={form.formState.isSubmitting}
+            className="transition-colors duration-200"
+          >
             Submit
           </Button>
           <div className="text-center mt-4">
@@ -130,7 +137,7 @@ export default function Register() {
             <Button
               variant="link"
               onClick={() => router.push('/login')}
-              className="p-0 h-auto"
+              className="transition-colors duration-200 p-0 h-auto"
             >
               Login
             </Button>

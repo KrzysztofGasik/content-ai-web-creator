@@ -41,7 +41,11 @@ export default function CardComponent({
 }: CardProps) {
   const { title, icon, description, action, content, footer } = data;
   return (
-    <Card className="w-full" id={id} style={style}>
+    <Card
+      className="w-full transition-all duration-300 hover:shadow-lg hover:scale-[1.02]"
+      id={id}
+      style={style}
+    >
       <CardHeader>
         {icon}
         <CardTitle>{title || empty}</CardTitle>

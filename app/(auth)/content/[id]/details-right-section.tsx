@@ -38,6 +38,7 @@ type DetailsLeftSectionProps = {
   isEditing: boolean;
   isFavorite: boolean;
   isArchived: boolean;
+  isSaving: boolean;
 };
 
 export const DetailsRightSection = ({
@@ -53,6 +54,7 @@ export const DetailsRightSection = ({
   setShowDeleteDialog,
   editedContent,
   isEditing,
+  isSaving,
 }: DetailsLeftSectionProps) => {
   const [showAttachDialog, setShowAttachDialog] = useState(false);
   const session = useSession();
@@ -114,9 +116,13 @@ export const DetailsRightSection = ({
           isFavorite={Boolean(content?.isFavorite)}
           isArchived={Boolean(content?.isArchived)}
           exportData={exportObject}
+          isSaving={isSaving}
         />
         <Separator className="my-6" />
-        <Button onClick={() => setShowAttachDialog(true)}>
+        <Button
+          className="transition-colors duration-200"
+          onClick={() => setShowAttachDialog(true)}
+        >
           Attach from Gallery
         </Button>
         <p className="my-2">OR</p>
@@ -126,6 +132,7 @@ export const DetailsRightSection = ({
             accept="image/*"
             onChange={handleFileChange}
             disabled={isUploading}
+            className="transition-all duration-200 focus:scale-[1.01]"
           />
           {isLoading ? (
             <ImagesGallerySkeleton />

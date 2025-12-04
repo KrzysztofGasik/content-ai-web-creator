@@ -69,7 +69,7 @@ export const DetailsLeftSection = ({
   return (
     <div className="flex flex-col gap-10">
       <Button
-        className="w-[200px]"
+        className="transition-colors duration-200 w-[200px]"
         onClick={() => {
           router.push('/content');
         }}

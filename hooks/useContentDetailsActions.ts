@@ -33,6 +33,7 @@ export default function useContentDetailsActions({
 }: Props) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleteContentId, setDeleteContentId] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -99,6 +100,7 @@ export default function useContentDetailsActions({
       content
     ) {
       try {
+        setIsSaving(true);
         const result = await updateContent({
           contentId: content.id,
           editedContent: editedContent,
@@ -116,6 +118,8 @@ export default function useContentDetailsActions({
       } catch (error) {
         console.error(error);
         toast.error('Error during attempt to update content');
+      } finally {
+        setIsSaving(false);
       }
     }
   };
@@ -149,5 +153,6 @@ export default function useContentDetailsActions({
     setShowDeleteDialog,
     deleteContentId,
     setDeleteContentId,
+    isSaving,
   };
 }

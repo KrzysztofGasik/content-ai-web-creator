@@ -17,6 +17,7 @@ import { Badge } from './ui/badge';
 import { exportAsImage } from '@/lib/utils';
 import DeleteContentDialog from './delete-content-dialog';
 import useImageDelete from '@/hooks/useImageDelete';
+import { GenericButton } from './generic-button';
 
 const empty = '-';
 
@@ -33,7 +34,10 @@ export const CardImage = ({
     useImageDelete();
 
   return (
-    <Card className="w-full" id={image.id}>
+    <Card
+      className="w-full transition-all duration-300 hover:shadow-lg hover:scale-[1.02]"
+      id={image.id}
+    >
       <CardHeader>
         <CardTitle className="truncate w-[200px]">{image.prompt}</CardTitle>
         <CardDescription className="flex flex-col gap-2">
@@ -61,23 +65,30 @@ export const CardImage = ({
       </CardContent>
       <CardFooter className="flex justify-start gap-2">
         <CardAction>
-          <Button onClick={() => router.push(`images/${image.id}`)}>
+          <Button
+            onClick={() => router.push(`images/${image.id}`)}
+            className="transition-colors duration-200"
+          >
             View
           </Button>
         </CardAction>
         <CardAction>
-          <Button variant="outline" onClick={() => exportAsImage(image)}>
+          <Button
+            variant="outline"
+            onClick={() => exportAsImage(image)}
+            className="transition-colors duration-200"
+          >
             Download
           </Button>
         </CardAction>
         <CardAction>
-          <Button
+          <GenericButton
+            label="Delete"
+            loadingLabel="Deleting..."
             variant="destructive"
             onClick={() => open(image.id)}
             disabled={isDeleting}
-          >
-            Delete
-          </Button>
+          />
         </CardAction>
       </CardFooter>
       {isOpen && (

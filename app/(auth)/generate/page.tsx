@@ -23,6 +23,7 @@ import { ContentType } from '@prisma/client';
 export default function Generate() {
   const [editedContent, setEditedContent] = useState('');
   const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const { data } = useQuery<ContentTemplateData>({
     queryKey: ['content-templates'],
@@ -63,6 +64,7 @@ export default function Generate() {
   };
   const handleSave = async () => {
     if (editedContent && editedContent !== generatedContent && savedContentId) {
+      setIsSaving(true);
       setEditedContent(editedContent);
       try {
         await updateContent({
@@ -73,6 +75,8 @@ export default function Generate() {
       } catch (error) {
         console.error(error);
         toast.error('Error during attempt to update content');
+      } finally {
+        setIsSaving(false);
       }
     }
   };
@@ -109,6 +113,7 @@ export default function Generate() {
                   generatedContent={generatedContent}
                   editedContent={editedContent || generatedContent}
                   isEditing={isEditing}
+                  isSaving={isSaving}
                 />
               ),
             }}

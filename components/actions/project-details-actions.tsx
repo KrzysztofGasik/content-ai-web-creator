@@ -13,8 +13,14 @@ export function ProjectDetailsActions({
 }: ProjectDetailsActionsProps) {
   return (
     <div className="flex flex-col gap-2">
-      <Button onClick={handleEdit}>{isEditing ? 'Cancel' : 'Edit'}</Button>
-      <Button variant="destructive" onClick={handleDelete}>
+      <Button onClick={handleEdit} className="transition-colors duration-200">
+        {isEditing ? 'Cancel' : 'Edit'}
+      </Button>
+      <Button
+        variant="destructive"
+        onClick={handleDelete}
+        className="transition-colors duration-200"
+      >
         Delete
       </Button>
     </div>

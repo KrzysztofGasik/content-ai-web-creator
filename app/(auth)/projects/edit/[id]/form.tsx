@@ -37,6 +37,7 @@ export const FormComponent = ({
                   id={field.name}
                   placeholder="Type project name"
                   autoComplete="off"
+                  className="transition-all duration-200 focus:scale-[1.01]"
                 />
               </FormControl>
               {fieldState.error && <FormMessage />}
@@ -74,13 +75,18 @@ export const FormComponent = ({
                   placeholder="Select color in hex"
                   autoComplete="off"
                   type="color"
+                  className="transition-all duration-200 focus:scale-[1.01]"
                 />
               </FormControl>
               {fieldState.error && <FormMessage />}
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={form.formState.isSubmitting}>
+        <Button
+          type="submit"
+          disabled={form.formState.isSubmitting}
+          className="transition-colors duration-200"
+        >
           Update project
         </Button>
       </form>

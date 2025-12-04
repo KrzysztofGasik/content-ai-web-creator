@@ -92,7 +92,7 @@ export const Tags = ({ contentId }: { contentId: string }) => {
           <Badge key={tag.id} className="text-md">
             {tag.name}{' '}
             <Button
-              className="p-0"
+              className="transition-colors duration-200 p-0"
               onClick={() => {
                 handleRemoveTag(tag.id);
               }}
@@ -107,7 +107,7 @@ export const Tags = ({ contentId }: { contentId: string }) => {
           <Button
             variant="outline"
             role="combobox"
-            className="w-[200px] justify-between"
+            className="transition-colors duration-200 w-[200px] justify-between"
           >
             Select tag...
             <ChevronsUpDown className="opacity-50" />
@@ -126,7 +126,7 @@ export const Tags = ({ contentId }: { contentId: string }) => {
                 <p className="text-sm">No tags found.</p>
                 <Button
                   onClick={() => handleAddTag(searchValue)}
-                  className="mb-2"
+                  className="transition-colors duration-200 mb-2"
                 >
                   Create {searchValue}
                 </Button>
