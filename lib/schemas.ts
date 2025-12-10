@@ -40,3 +40,24 @@ export const createProjectSchema = z.object({
   description: z.string().optional(),
   color: z.string().optional(),
 });
+
+export const updateProfileSchema = z.object({
+  email: z.email(),
+  name: z.string(),
+});
+
+export const updatePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(8),
+    newPassword: z.string().min(8),
+    confirmPassword: z.string().min(8),
+  })
+  .superRefine(({ newPassword, confirmPassword }, ctx) => {
+    if (newPassword !== confirmPassword) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'Passwords did not match',
+        path: ['confirmPassword'],
+      });
+    }
+  });

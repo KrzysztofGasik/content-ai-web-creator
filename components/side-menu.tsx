@@ -2,9 +2,8 @@
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { AvatarImage } from '@radix-ui/react-avatar';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
-import { Session } from 'next-auth';
 import {
   DropdownMenuContent,
   DropdownMenu,
@@ -51,16 +50,21 @@ const menuElements = [
     path: '/analytics',
     label: 'View Analytics',
   },
+  {
+    path: '/dashboard/settings',
+    label: 'Settings',
+  },
 ];
 
-export const SideMenu = ({ data }: { data: Session | null }) => {
+export const SideMenu = () => {
   const router = useRouter();
+  const { data: session } = useSession();
   const { theme, setTheme } = useTheme();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar>
-          <AvatarImage src={data?.user?.image as string} />
+          <AvatarImage src={session?.user?.image as string} />
           <AvatarFallback>
             <CircleUserRound size="2rem" />
           </AvatarFallback>
@@ -70,7 +74,7 @@ export const SideMenu = ({ data }: { data: Session | null }) => {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuLabel>
-          Welcome <b>{data?.user.name}</b>
+          Welcome <b>{session?.user.name}</b>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup className="flex flex-col items-start">

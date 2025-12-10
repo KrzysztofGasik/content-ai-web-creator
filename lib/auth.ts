@@ -52,17 +52,30 @@ const authOptions: NextAuthOptions = {
   ],
   session: { strategy: 'jwt' as const },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
       if (user) {
         token.id = user.id;
         token.email = user.email;
         token.name = user.name;
       }
+      if (trigger === 'update' && token.id) {
+        const freshUser = await prisma.user.findUnique({
+          where: { id: token.id as string },
+        });
+        if (freshUser) {
+          token.name = freshUser.name;
+          token.email = freshUser.email;
+        }
+      }
+
       return token;
     },
     async session({ session, token }) {
       if (session.user && token) {
         session.user.id = token.id as string;
+      }
+      if (token) {
+        session.user.name = token.name;
       }
       return session;
     },

@@ -4,6 +4,8 @@ import {
   generateSchema,
   loginSchema,
   registerSchema,
+  updatePasswordSchema,
+  updateProfileSchema,
 } from '@/lib/schemas';
 import { Image, Project, Tag } from '@prisma/client';
 import { Content, ContentType, ContentVersion } from '@prisma/client';
@@ -203,3 +205,5 @@ export type LoginData = z.infer<typeof loginSchema>;
 export type GenerateData = z.infer<typeof generateSchema>;
 export type ImageGenerateParams = z.infer<typeof generateImageSchema>;
 export type CreateProjectData = z.infer<typeof createProjectSchema>;
+export type UpdateProfileData = z.infer<typeof updateProfileSchema>;
+export type UpdatePasswordData = z.infer<typeof updatePasswordSchema>;

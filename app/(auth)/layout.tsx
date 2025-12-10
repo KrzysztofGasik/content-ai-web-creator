@@ -7,13 +7,13 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(authOptions);
+  await getServerSession(authOptions);
 
   return (
     <>
       <header>
         <nav className="flex justify-between px-4 py-2">
-          <Heading session={session} />
+          <Heading />
         </nav>
       </header>
       <main className="flex flex-col justify-center items-center p-5">
