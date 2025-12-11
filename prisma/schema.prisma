@@ -99,6 +99,7 @@ model User {
   sessions      Session[]
   credits       Int       @default(1000000)
   creditsUsed   Int       @default(0)
+  lastLogin     DateTime?
 
   @@map("users")
 }

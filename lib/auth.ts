@@ -42,7 +42,11 @@ const authOptions: NextAuthOptions = {
             return null;
           }
 
-          return { id: user.id, email: user.email, name: user.name };
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+          };
         } catch (error) {
           console.error(error);
           return null;
@@ -54,9 +58,13 @@ const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user, trigger }) {
       if (user) {
+        const userObject = await prisma.user.findUnique({
+          where: { email: user?.email as string },
+        });
         token.id = user.id;
         token.email = user.email;
         token.name = user.name;
+        token.lastLogin = userObject?.lastLogin;
       }
       if (trigger === 'update' && token.id) {
         const freshUser = await prisma.user.findUnique({
@@ -73,6 +81,7 @@ const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session.user && token) {
         session.user.id = token.id as string;
+        session.user.lastLogin = token.lastLogin;
       }
       if (token) {
         session.user.name = token.name;

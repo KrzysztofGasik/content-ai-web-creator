@@ -5,7 +5,7 @@ import { Content } from '@prisma/client';
 import { useState } from 'react';
 import { DetailsLeftSection } from './details-left-section';
 import { DetailsRightSection } from './details-right-section';
-import DeleteContentDialog from '@/components/delete-content-dialog';
+import DeleteContentDialog from '@/components/dialogs/delete-content-dialog';
 import { Toaster } from 'sonner';
 
 export default function DetailsWrapper({

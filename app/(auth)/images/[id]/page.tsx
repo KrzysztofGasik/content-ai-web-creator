@@ -5,6 +5,20 @@ import { getServerSession } from 'next-auth';
 import { ImageDetails } from './image-details';
 import { Toaster } from 'sonner';
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const session = await getServerSession(authOptions);
+  const { id } = await params;
+  const item = await getUserImageById(session?.user.id as string, id);
+
+  return {
+    title: `Image file name | ${item.image?.filename}`,
+  };
+}
+
 export default async function ImagesDetails({
   params,
 }: {

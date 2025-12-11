@@ -2,7 +2,7 @@
 
 import { ProjectDetailsActions } from '@/components/actions/project-details-actions';
 import CardComponent from '@/components/card';
-import DeleteContentDialog from '@/components/delete-content-dialog';
+import DeleteContentDialog from '@/components/dialogs/delete-content-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';

@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 import {
   Dialog,
   DialogClose,
@@ -8,19 +8,19 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from './ui/dialog';
+} from '../ui/dialog';
 import { SetStateAction, useState } from 'react';
 import { Image as ImageType } from '@prisma/client';
 import Image from 'next/image';
-import { Checkbox } from './ui/checkbox';
+import { Checkbox } from '../ui/checkbox';
 import { ImageContentData } from '@/types/types';
 import {
   attachImageToContent,
   getUnattachedImages,
 } from '@/lib/actions/image-actions';
 import { toast, Toaster } from 'sonner';
-import { Spinner } from './ui/spinner';
-import { WrapperCenter } from './wrapper-center';
+import { Spinner } from '../ui/spinner';
+import { WrapperCenter } from '../wrapper-center';
 
 type AttachImagesDialogProps = {
   open: boolean;

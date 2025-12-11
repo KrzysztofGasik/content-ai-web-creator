@@ -97,3 +97,35 @@ export async function updatePasswordTab({
     };
   }
 }
+
+export async function deleteAccountTab() {
+  try {
+    const { session } = await getUserSession();
+    const userId = session?.user.id;
+
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+
+    if (!user) {
+      return {
+        success: false,
+        message: 'User not found',
+      };
+    }
+
+    await prisma.user.delete({
+      where: { id: userId },
+    });
+
+    return {
+      success: true,
+      message: 'Account deleted successfully',
+    };
+  } catch (error) {
+    console.error(error);
+
+    return {
+      success: false,
+      message: 'Error during account deletion',
+    };
+  }
+}

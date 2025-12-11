@@ -7,6 +7,12 @@ import {
 import { authOptions } from '@/lib/auth';
 import { getServerSession } from 'next-auth';
 import { AnalyticsClient } from './analytics-client';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Analytics | Content AI Web Creator app',
+  description: 'Created by Krzysztof &copy; 2025',
+};
 
 export default async function Analytics() {
   await getServerSession(authOptions);

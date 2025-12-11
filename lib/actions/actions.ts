@@ -4,6 +4,40 @@ import { getServerSession, Session } from 'next-auth';
 import { prisma } from '../prisma';
 import { authOptions } from '../auth';
 
+export async function updateLastLogin() {
+  try {
+    const { session } = await getUserSession();
+    const user = await prisma.user.findUnique({
+      where: { id: session?.user?.id },
+    });
+
+    if (!user) {
+      return {
+        success: false,
+        message: 'User not found',
+      };
+    }
+
+    await prisma.user.update({
+      where: { id: session?.user?.id },
+      data: {
+        lastLogin: new Date(),
+      },
+    });
+
+    return {
+      success: true,
+      message: 'Last login updated successfully',
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: 'Error during attempt to update last login',
+    };
+  }
+}
+
 export async function getUserSession(): Promise<{
   session: Session;
 }> {

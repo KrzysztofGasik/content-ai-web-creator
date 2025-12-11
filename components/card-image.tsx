@@ -15,7 +15,7 @@ import { Button } from './ui/button';
 import { filesize } from 'filesize';
 import { Badge } from './ui/badge';
 import { exportAsImage } from '@/lib/utils';
-import DeleteContentDialog from './delete-content-dialog';
+import DeleteContentDialog from './dialogs/delete-content-dialog';
 import useImageDelete from '@/hooks/useImageDelete';
 import { GenericButton } from './generic-button';
 

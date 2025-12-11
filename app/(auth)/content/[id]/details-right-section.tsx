@@ -18,7 +18,7 @@ import Image from 'next/image';
 import { ImagesGallerySkeleton } from '@/components/loaders/images-gallery-skeleton';
 import { uploadAndSaveFile } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import AttachImagesDialog from '@/components/attach-images-dialog';
+import AttachImagesDialog from '@/components/dialogs/attach-images-dialog';
 import { Tags } from './tags';
 
 type DetailsLeftSectionProps = {

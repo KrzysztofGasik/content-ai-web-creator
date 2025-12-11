@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { GenericButton } from './generic-button';
-import { Button } from './ui/button';
+import { GenericButton } from '../generic-button';
+import { Button } from '../ui/button';
 import {
   Dialog,
   DialogClose,
@@ -9,7 +9,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from './ui/dialog';
+} from '../ui/dialog';
 
 type DeleteContentDialogProps = {
   open: boolean;

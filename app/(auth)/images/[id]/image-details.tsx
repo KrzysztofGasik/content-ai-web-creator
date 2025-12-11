@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import useImageDelete from '@/hooks/useImageDelete';
 import { Separator } from '@/components/ui/separator';
-import DeleteContentDialog from '@/components/delete-content-dialog';
+import DeleteContentDialog from '@/components/dialogs/delete-content-dialog';
 import { GenericButton } from '@/components/generic-button';
 
 const empty = '---';

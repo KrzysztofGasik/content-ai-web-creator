@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ProfilePage from './profile';
 import SecurityPage from './security';
 import { Button } from '@/components/ui/button';
+import DangerZonePage from './danger-zone';
 
 export const ProfileTabs = () => {
   return (
@@ -27,7 +28,9 @@ export const ProfileTabs = () => {
         Coming soon :)
         <Button>Copy API key</Button>
       </TabsContent>
-      <TabsContent value="dangerZone">Change your password here.</TabsContent>
+      <TabsContent value="dangerZone">
+        <DangerZonePage />
+      </TabsContent>
     </Tabs>
   );
 };

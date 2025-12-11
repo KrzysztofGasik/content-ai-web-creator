@@ -4,6 +4,13 @@ import { ContentTypeParams, SortOptions } from '@/types/types';
 import { QuickActions } from '@/components/actions/quick-actions';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import Welcome from './welcome';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Dashboard | Content AI Web Creator app',
+  description: 'Created by Krzysztof &copy; 2025',
+};
 
 export default async function Dashboard({
   searchParams,
@@ -17,7 +24,7 @@ export default async function Dashboard({
     sort?: SortOptions;
   }>;
 }) {
-  await getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
   const params = await searchParams;
   const project = params.project;
   const type = params.type;
@@ -25,6 +32,7 @@ export default async function Dashboard({
   const favorite = params.favorite;
   const archived = params.archived;
   const sort = params.sort;
+  const lastLogin = !session?.user?.lastLogin;
 
   const data = await getUserContent({
     project: project as string,
@@ -66,6 +74,7 @@ export default async function Dashboard({
           />
         ))}
       </div>
+      <Welcome lastLogin={lastLogin} />
     </section>
   );
 }

@@ -7,7 +7,7 @@ export const LabelInputWrapper = ({
 }) => {
   return (
     <div className="flex flex-col gap-4 items-start">
-      {label && <p className="px-1 py-1 text-sm font-bold">{label}</p>}
+      {label && <span className="px-1 py-1 text-sm font-bold">{label}</span>}
       {children}
     </div>
   );
