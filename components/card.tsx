@@ -49,7 +49,7 @@ export default function CardComponent({
       <CardHeader>
         {icon}
         <CardTitle>{title || empty}</CardTitle>
-        <CardDescription>{description || empty}</CardDescription>
+        {description && <CardDescription>{description}</CardDescription>}
         <CardAction>{action}</CardAction>
       </CardHeader>
       <CardContent>
