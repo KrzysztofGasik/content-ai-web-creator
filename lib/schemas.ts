@@ -1,6 +1,6 @@
-import { ContentType } from '@/prisma/generated/enums';
 import z from 'zod';
 import { imageQuality, imageSize, imageStyle } from './utils';
+import { ContentType } from '@prisma/client';
 
 export const registerSchema = z.object({
   email: z.email(),
