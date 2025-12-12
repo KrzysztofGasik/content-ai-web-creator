@@ -1,7 +1,6 @@
 'use client';
 
 import { Card } from '@/components/ui/card';
-import { Spinner } from '@/components/ui/spinner';
 import { updateContent } from '@/lib/actions/content-actions';
 import { getContentTemplates } from '@/lib/actions/sanity-actions';
 import { generateSchema } from '@/lib/schemas';
@@ -15,7 +14,6 @@ import CardComponent from '../../../components/card';
 import { Sparkle } from 'lucide-react';
 import { FormComponent } from './form';
 import useContentGeneration from '@/hooks/useContentGeneration';
-import { WrapperCenter } from '@/components/wrapper-center';
 import { GenerateActions } from '@/components/actions/generate-actions';
 import { useQuery } from '@tanstack/react-query';
 import { ContentType } from '@prisma/client';
@@ -42,7 +40,7 @@ export default function GenerateCard() {
     },
   });
 
-  const { isGenerating, savedContentId, generateContent, generatedContent } =
+  const { savedContentId, generateContent, generatedContent } =
     useContentGeneration();
 
   const onSubmit = async (data: GenerateData) => {
@@ -89,11 +87,6 @@ export default function GenerateCard() {
           onSubmit={onSubmit}
           templates={data?.templates}
         />
-        {isGenerating && (
-          <WrapperCenter>
-            <Spinner className="size-10" />
-          </WrapperCenter>
-        )}
       </div>
       {generatedContent && (
         <div className="mt-4 p-4 border rounded flex-1 flex justify-center">

@@ -10,8 +10,6 @@ import { useForm } from 'react-hook-form';
 import { toast, Toaster } from 'sonner';
 import z from 'zod';
 import { FormComponent } from './form';
-import { WrapperCenter } from '@/components/wrapper-center';
-import { Spinner } from '@/components/ui/spinner';
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import CardComponent from '@/components/card';
@@ -22,7 +20,6 @@ import { exportAsImage } from '@/lib/utils';
 
 export default function GenerateImageCard() {
   const { data: session } = useSession();
-  const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<Image | null>(null);
   const { data } = useQuery<ImageContentData>({
     queryKey: ['user-image'],
@@ -41,7 +38,6 @@ export default function GenerateImageCard() {
 
   const onSubmit = async (data: z.infer<typeof generateImageSchema>) => {
     try {
-      setIsGenerating(true);
       const response = await fetch('/api/auth/generate/image', {
         method: 'POST',
         headers: {
@@ -60,11 +56,8 @@ export default function GenerateImageCard() {
       setGeneratedImage(result.image);
       toast.success('Image generation successfully');
     } catch (error) {
-      setIsGenerating(false);
       console.error(error);
       toast.error('Error during sending query to AI');
-    } finally {
-      setIsGenerating(false);
     }
   };
 
@@ -91,11 +84,6 @@ export default function GenerateImageCard() {
     <Card className="flex flex-col p-10 w-full lg:w-[50%] justify-around md:flex-row">
       <div className={`${data?.images ? 'flex-1' : 'w-1/2 mx-auto'}`}>
         <FormComponent form={form} onSubmit={onSubmit} />
-        {isGenerating && (
-          <WrapperCenter>
-            <Spinner className="size-10" />
-          </WrapperCenter>
-        )}
       </div>
       {generatedImage && (
         <div className="mt-4 p-4 border rounded flex-1 flex justify-center">

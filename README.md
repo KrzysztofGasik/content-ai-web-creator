@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ContentForge AI 🚀
 
-## Getting Started
+Full-stack content generation platform with AI text/image creation, project organization, and analytics.
 
-First, run the development server:
+## 🔗 Demo
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+https://content-ai-web-creator.vercel.app
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📸 Screenshots
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+![LandingPage](/public/screenshots/landing.png)
+![Content Generation](/public/screenshots/content.png)
+![Images gallery](/public/screenshots/images.png)
+![Analytics](/public/screenshots/analytics.png)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ✨ Features
 
-## Learn More
+- 🤖 AI text generation with GPT-4 (streaming)
+- 🎨 Image generation with DALL-E 3
+- 📁 Project organization with tags
+- 📊 Analytics dashboard with charts
+- 📝 Content version history
+- 🔍 Advanced search & filtering
+- ☁️ AWS S3 image storage
+- 🌙 Dark/light mode
 
-To learn more about Next.js, take a look at the following resources:
+## 🛠️ Tech Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Frontend:** Next.js 16, Tailwind CSS, shadcn/ui, TanStack Query
+**Backend:** Prisma, PostgreSQL (Neon), NextAuth v5
+**AI:** OpenAI GPT-3, DALL-E 3, Vercel AI SDK
+**Storage:** AWS S3
+**Deployment:** Vercel
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🚀 Getting Started
 
-## Deploy on Vercel
+### Prerequisites
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Node.js 18+
+- PostgreSQL database (Neon recommended)
+- OpenAI API key
+- AWS S3 bucket
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Installation
+
+1. Clone the repository
+2. Install dependencies: `npm install --legacy-peer-deps`
+3. Copy `.env.example` to `.env`
+4. Fill in environment variables
+5. Push database schema: `npx prisma db push`
+6. Run dev server: `npm run dev`
+
+## 📝 Environment Variables
+
+| Variable                | Description                           |
+| ----------------------- | ------------------------------------- |
+| `DATABASE_URL`          | PostgreSQL connection string          |
+| `AUTH_SECRET`           | NextAuth secret key                   |
+| `AUTH_URL`              | App URL (e.g., http://localhost:3000) |
+| `OPENAI_API_KEY`        | OpenAI API key                        |
+| `AWS_ACCESS_KEY_ID`     | AWS access key                        |
+| `AWS_SECRET_ACCESS_KEY` | AWS secret key                        |
+| `AWS_REGION`            | S3 bucket region                      |
+| `AWS_S3_BUCKET_NAME`    | S3 bucket name                        |
+
+## 📄 License
+
+MIT
