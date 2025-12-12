@@ -22,7 +22,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-10 w-full animate-in fade-in duration-500">
           <CardComponent
             data={{
               id: 1,
