@@ -138,7 +138,6 @@ export async function getUserApiKey() {
 
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      select: { apiKey: true },
     });
 
     if (!user) {
