@@ -1,6 +1,6 @@
 import { saveGeneratedContent } from '@/lib/actions/content-actions';
 import { generatePromptText } from '@/lib/utils';
-import { GenerateData } from '@/types/types';
+import { GenerateData, GenerateResponse } from '@/types/types';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -22,12 +22,13 @@ export default function useContentGeneration() {
         body: JSON.stringify(data),
       });
 
-      if (!response.ok) {
-        toast.error('Error during sending query to AI');
+      const result: GenerateResponse = await response.json();
+
+      if (!result.success) {
+        toast.error(result.message);
         return;
       }
 
-      const result = await response.json();
       const { content, tokens } = result;
       setGeneratedContent(content);
 
@@ -48,8 +49,10 @@ export default function useContentGeneration() {
       });
       if (saveResult.success && saveResult.contentId) {
         setSavedContentId(saveResult?.contentId);
+        toast.success('Successfully generated content to AI ');
+      } else {
+        toast.error(saveResult.message);
       }
-      toast.success('Successfully generated content to AI ');
     } catch (error) {
       console.error('Error during sending query to AI', error);
     } finally {

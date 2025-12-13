@@ -13,6 +13,7 @@ import { twMerge } from 'tailwind-merge';
 import { toast } from 'sonner';
 import { saveImageMetadata } from './actions/image-actions';
 import { QueryClient } from '@tanstack/react-query';
+import { createCipheriv, createDecipheriv, randomBytes } from 'node:crypto';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -220,4 +221,36 @@ export function calculateImageTokens(params: ImageParams): number {
   };
 
   return costMap[params.size]?.[params.quality] || 20000; // Default to standard cost
+}
+
+export function encryptApiKey(key: string) {
+  const secret = Buffer.from(
+    process.env.API_KEY_ENCRYPTION_SECRET as string,
+    'hex'
+  );
+  const iv = randomBytes(16);
+  const cipher = createCipheriv('aes-256-gcm', secret, iv);
+  const encrypted = cipher.update(key, 'utf-8', 'hex') + cipher.final('hex');
+  const authTag = cipher.getAuthTag();
+  return `${iv.toString('hex')}${authTag.toString('hex')}${encrypted}`;
+}
+
+export function decryptApiKey(encryptedData: string) {
+  const secret = Buffer.from(
+    process.env.API_KEY_ENCRYPTION_SECRET as string,
+    'hex'
+  );
+  const iv = encryptedData.slice(0, 32);
+  const authTag = encryptedData.slice(32, 64);
+  const encrypted = encryptedData.slice(64);
+  const decipher = createDecipheriv(
+    'aes-256-gcm',
+    secret,
+    Buffer.from(iv, 'hex')
+  );
+  decipher.setAuthTag(Buffer.from(authTag, 'hex'));
+  const decrypted =
+    decipher.update(encrypted, 'hex', 'utf-8') + decipher.final('utf-8');
+
+  return decrypted;
 }

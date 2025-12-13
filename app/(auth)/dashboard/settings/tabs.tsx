@@ -3,8 +3,8 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ProfilePage from './profile';
 import SecurityPage from './security';
-import { Button } from '@/components/ui/button';
 import DangerZonePage from './danger-zone';
+import ApiPage from './api-key';
 
 export const ProfileTabs = () => {
   return (
@@ -21,12 +21,8 @@ export const ProfileTabs = () => {
       <TabsContent value="security">
         <SecurityPage />
       </TabsContent>
-      <TabsContent
-        value="api"
-        className="flex flex-col items-center text-2xl gap-4"
-      >
-        Coming soon :)
-        <Button>Copy API key</Button>
+      <TabsContent value="api">
+        <ApiPage />
       </TabsContent>
       <TabsContent value="dangerZone">
         <DangerZonePage />

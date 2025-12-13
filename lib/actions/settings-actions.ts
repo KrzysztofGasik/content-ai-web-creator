@@ -5,6 +5,7 @@ import { prisma } from '../prisma';
 import { getUserSession } from './actions';
 import { revalidatePath } from 'next/cache';
 import bcrypt from 'bcryptjs';
+import { decryptApiKey, encryptApiKey } from '../utils';
 
 export async function updateProfileTab({ name, email }: UpdateProfileData) {
   try {
@@ -126,6 +127,91 @@ export async function deleteAccountTab() {
     return {
       success: false,
       message: 'Error during account deletion',
+    };
+  }
+}
+
+export async function getUserApiKey() {
+  try {
+    const { session } = await getUserSession();
+    const userId = session?.user.id;
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { apiKey: true },
+    });
+
+    if (!user) {
+      return {
+        success: false,
+        message: 'User not found',
+      };
+    }
+
+    if (!user.apiKey) {
+      return {
+        success: false,
+        message: 'No API key configured',
+      };
+    }
+
+    const decodeKey = decryptApiKey(user.apiKey);
+
+    return {
+      success: true,
+      message: 'Key fetched successfully',
+      key: decodeKey,
+    };
+  } catch (error) {
+    console.error(error);
+
+    return {
+      success: false,
+      message: 'Error during key updated action',
+    };
+  }
+}
+
+export async function updateUserApiKey({ key }: { key: string }) {
+  try {
+    const { session } = await getUserSession();
+    const userId = session?.user.id;
+
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+
+    if (!user) {
+      return {
+        success: false,
+        message: 'User not found',
+      };
+    }
+
+    if (!key.startsWith('sk-')) {
+      return {
+        success: false,
+        message: 'Invalid key format for open ai key',
+      };
+    }
+
+    const encodeKey = encryptApiKey(key);
+
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        apiKey: encodeKey,
+      },
+    });
+
+    return {
+      success: true,
+      message: 'Key updated successfully',
+    };
+  } catch (error) {
+    console.error(error);
+
+    return {
+      success: false,
+      message: 'Error during key updated action',
     };
   }
 }

@@ -100,6 +100,7 @@ model User {
   credits       Int       @default(1000000)
   creditsUsed   Int       @default(0)
   lastLogin     DateTime?
+  apiKey        String    @default("")
 
   @@map("users")
 }

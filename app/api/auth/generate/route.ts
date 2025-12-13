@@ -5,12 +5,20 @@ import { authOptions } from '@/lib/auth';
 import { extractValuesFromString, generatePromptText } from '@/lib/utils';
 import { getContentTemplateById } from '@/lib/actions/sanity-actions';
 import OpenAI from 'openai';
+import { getUserApiKey } from '@/lib/actions/settings-actions';
 
 export async function POST(req: Request) {
   try {
     await getServerSession(authOptions);
+    const result = await getUserApiKey();
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, message: 'No API key configured' },
+        { status: 403 }
+      );
+    }
     const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
+      apiKey: result.key,
     });
     const body = await req.json();
     const parsedBody = generateSchema.safeParse(body);

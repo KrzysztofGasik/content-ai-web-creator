@@ -57,7 +57,6 @@ https://content-ai-web-creator.vercel.app
 | `DATABASE_URL`          | PostgreSQL connection string          |
 | `AUTH_SECRET`           | NextAuth secret key                   |
 | `AUTH_URL`              | App URL (e.g., http://localhost:3000) |
-| `OPENAI_API_KEY`        | OpenAI API key                        |
 | `AWS_ACCESS_KEY_ID`     | AWS access key                        |
 | `AWS_SECRET_ACCESS_KEY` | AWS secret key                        |
 | `AWS_REGION`            | S3 bucket region                      |

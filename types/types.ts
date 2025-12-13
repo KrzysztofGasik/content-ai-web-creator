@@ -4,6 +4,7 @@ import {
   generateSchema,
   loginSchema,
   registerSchema,
+  updateApiKeySchema,
   updatePasswordSchema,
   updateProfileSchema,
 } from '@/lib/schemas';
@@ -200,6 +201,20 @@ export type TokensData = {
   imageTokens: number;
 };
 
+export type ApiKeyData = {
+  success: boolean;
+  message: string;
+  key?: string;
+};
+
+export type GenerateResponse =
+  | { success: true; content: string; tokens: number }
+  | { success: false; message: string };
+
+export type GenerateImageResponse =
+  | { success: true; image: Image }
+  | { success: false; message: string };
+
 export type RegisterData = z.infer<typeof registerSchema>;
 export type LoginData = z.infer<typeof loginSchema>;
 export type GenerateData = z.infer<typeof generateSchema>;
@@ -207,3 +222,4 @@ export type ImageGenerateParams = z.infer<typeof generateImageSchema>;
 export type CreateProjectData = z.infer<typeof createProjectSchema>;
 export type UpdateProfileData = z.infer<typeof updateProfileSchema>;
 export type UpdatePasswordData = z.infer<typeof updatePasswordSchema>;
+export type UpdateKeyData = z.infer<typeof updateApiKeySchema>;

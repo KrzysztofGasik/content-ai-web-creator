@@ -14,14 +14,23 @@ import {
   ImageStyle,
 } from '@/types/types';
 import { calculateImageTokens } from '@/lib/utils';
+import { getUserApiKey } from '@/lib/actions/settings-actions';
 
 export async function POST(req: Request) {
   try {
     const { session } = await getUserSession();
+    const result = await getUserApiKey();
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, message: 'No API key configured' },
+        { status: 403 }
+      );
+    }
     const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
+      apiKey: result.key,
     });
     const body = await req.json();
+
     const parsedBody = generateImageSchema.safeParse(body);
     if (!parsedBody.success) {
       return NextResponse.json(

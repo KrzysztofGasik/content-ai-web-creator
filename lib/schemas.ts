@@ -61,3 +61,7 @@ export const updatePasswordSchema = z
       });
     }
   });
+
+export const updateApiKeySchema = z.object({
+  key: z.string().startsWith('sk-'),
+});

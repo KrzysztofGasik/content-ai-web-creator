@@ -3,7 +3,11 @@
 import { Card } from '@/components/ui/card';
 import { getUserImages } from '@/lib/actions/image-actions';
 import { generateImageSchema } from '@/lib/schemas';
-import { ImageContentData, ImageSize } from '@/types/types';
+import {
+  GenerateImageResponse,
+  ImageContentData,
+  ImageSize,
+} from '@/types/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
@@ -46,12 +50,12 @@ export default function GenerateImageCard() {
         body: JSON.stringify(data),
       });
 
-      if (!response.ok) {
-        toast.error('Error during sending query to AI');
+      const result: GenerateImageResponse = await response.json();
+
+      if (!result.success) {
+        toast.error(result.message);
         return;
       }
-
-      const result = await response.json();
 
       setGeneratedImage(result.image);
       toast.success('Image generation successfully');
